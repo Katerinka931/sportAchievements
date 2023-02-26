@@ -1,7 +1,7 @@
 package com.coursework.sportachievements.controller;
 
-import com.coursework.sportachievements.entity.Sport;
-import com.coursework.sportachievements.repository.SportRepository;
+import com.coursework.sportachievements.dto.SportPojo;
+import com.coursework.sportachievements.service.SportService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,14 +12,14 @@ import java.util.List;
 @RequestMapping("/api")
 public class SportController {
 
-    private final SportRepository sportRepository;
+    private final SportService sportService;
 
-    public SportController(SportRepository sportRepository) {
-        this.sportRepository = sportRepository;
+    public SportController(SportService sportService) {
+        this.sportService = sportService;
     }
 
     @GetMapping()
-    public List<Sport> getSports(){
-        return sportRepository.findBy();
+    public List<SportPojo> getSports(){
+        return sportService.findAll();
     }
 }

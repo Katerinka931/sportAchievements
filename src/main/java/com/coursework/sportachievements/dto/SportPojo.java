@@ -47,4 +47,12 @@ public class SportPojo {
         }
         return sport;
     }
+
+    public static List<SportPojo> convertSportsToPojo(List<Sport> sports) {
+        List<SportPojo> pojoList = new ArrayList<>();
+        for (Sport sport : sports) {
+            pojoList.add(SportPojo.fromEntity(sport));
+        }
+        return pojoList;
+    }
 }
