@@ -4,14 +4,15 @@ import com.coursework.sportachievements.entity.Achievement;
 import com.coursework.sportachievements.entity.Sportsman;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
-    List<Achievement> findBy();
-
     List<Achievement> findAllByName(String name);
 
     Achievement findById(long id);
+
+    List<Achievement> findAllByRecvDate(Date recvDate);
 
     List<Achievement> findAllBySportsman(Sportsman sportsman);
 

@@ -8,7 +8,7 @@ import java.util.List;
 public interface SportRepository extends JpaRepository<Sport, Long> {
     List<Sport> findBy();
 
-    List<Sport> findAllByName(String name);
+    Sport findByNameIgnoreCase(String name);
 
     Sport findById(long id);
 

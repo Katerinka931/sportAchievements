@@ -78,4 +78,12 @@ public class SportsmanPojo {
 
         return sportsman;
     }
+
+    public static List<SportsmanPojo> convertSportsmenToPojo(List<Sportsman> sportsmen) {
+        List<SportsmanPojo> pojos = new ArrayList<>();
+        for (Sportsman sportsman : sportsmen) {
+            pojos.add(SportsmanPojo.fromEntity(sportsman));
+        }
+        return pojos;
+    }
 }

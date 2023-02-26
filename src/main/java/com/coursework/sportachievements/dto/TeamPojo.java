@@ -49,4 +49,12 @@ public class TeamPojo {
         }
         return team;
     }
+
+    public static List<TeamPojo> convertTeamsToPojo(List<Team> teams) {
+        List<TeamPojo> pojos = new ArrayList<>();
+        for (Team team : teams) {
+            pojos.add(TeamPojo.fromEntity(team));
+        }
+        return pojos;
+    }
 }

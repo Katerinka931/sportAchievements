@@ -4,7 +4,9 @@ import com.coursework.sportachievements.entity.Achievement;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,5 +29,13 @@ public class AchievementPojo {
         achievement.setName(pojo.getName());
         achievement.setRecvDate(pojo.getRecvDate());
         return achievement;
+    }
+
+    public static List<AchievementPojo> convertAchievementsToPojo(List<Achievement> achievements) {
+        List<AchievementPojo> pojos = new ArrayList<>();
+        for (Achievement achievement : achievements) {
+            pojos.add(AchievementPojo.fromEntity(achievement));
+        }
+        return pojos;
     }
 }

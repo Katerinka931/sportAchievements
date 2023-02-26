@@ -12,5 +12,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Team findById(long id);
 
+    List<Team> findByCount(int count);
+
     void deleteById(long id);
 }
