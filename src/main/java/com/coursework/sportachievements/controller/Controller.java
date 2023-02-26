@@ -110,10 +110,35 @@ public class Controller {
         return achievementService.createAchievement(achievementPojo);
     }
 
+    @PutMapping("/sport/{id}")
+    public void updateSport(@PathVariable long id, @RequestBody SportPojo pojo) {
+        sportService.updateSport(id, pojo);
+    }
 
+    @PutMapping("/team/{id}")
+    public void updateTeam(@PathVariable long id, @RequestBody TeamPojo pojo) {
+        teamService.updateTeam(id, pojo);
+    }
+
+    @PutMapping("/sportsman/{id}")
+    public void updateSportsman(@PathVariable long id, @RequestBody SportsmanPojo pojo) {
+        sportsmanService.updateSportsman(id, pojo);
+    }
+
+    @PutMapping("/contact/{id}")
+    public void updateContact(@PathVariable long id, @RequestBody ContactPojo pojo) {
+        contactService.updateContact(id, pojo);
+    }
+
+    @PutMapping("/achievement/{id}")
+    public void updateAchievement(@PathVariable long id, @RequestBody AchievementPojo pojo) {
+        achievementService.updateAchievement(id, pojo);
+    }
     // todo можно ли использовать requestParam при поиске по одной и той же ссылке (или как осуществить поиск)
     //  как сделать доступ для админского контроллера?
     //  как разделять контроллеры? по ролям или по сущностям? (наверное по сущностям)
     //  как избавиться от дупликатов (например, метод delete)
     //  как лучше возвращать объект в ангуляр? @ResponseBody или ResponseEntity<>
+    //  что возвращает update?
+    //  проверки и ловля исключений при необходимости, заранее не писать
 }

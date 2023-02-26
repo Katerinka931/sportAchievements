@@ -54,5 +54,13 @@ public class SportService {
         sportRepository.save(SportPojo.toEntity(sportPojo));
         return sportPojo;
     }
+
+    public void updateSport(long id, SportPojo pojo) {
+        Sport sport = sportRepository.findById(id);
+        if (sport != null) {
+            sport.setName(pojo.getName());
+            sportRepository.save(sport);
+        }
+    }
 }
 

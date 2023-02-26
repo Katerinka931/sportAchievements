@@ -1,5 +1,6 @@
 package com.coursework.sportachievements.service;
 
+import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.dto.TeamPojo;
 import com.coursework.sportachievements.entity.Team;
 import com.coursework.sportachievements.repository.TeamRepository;
@@ -56,5 +57,14 @@ public class TeamService {
     public TeamPojo createTeam(TeamPojo teamPojo) {
         teamRepository.save(TeamPojo.toEntity(teamPojo));
         return teamPojo;
+    }
+
+    public void updateTeam(long id, TeamPojo pojo) {
+        Team team = teamRepository.findById(id);
+        if (team != null) {
+            team.setName(pojo.getName());
+            team.setCount(pojo.getCount());
+            teamRepository.save(team);
+        }
     }
 }

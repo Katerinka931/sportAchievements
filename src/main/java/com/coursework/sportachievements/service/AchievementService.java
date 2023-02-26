@@ -1,6 +1,7 @@
 package com.coursework.sportachievements.service;
 
 import com.coursework.sportachievements.dto.AchievementPojo;
+import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.entity.Achievement;
 import com.coursework.sportachievements.repository.AchievementRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,14 @@ public class AchievementService {
     public AchievementPojo createAchievement(AchievementPojo achievementPojo) {
         achievementRepository.save(AchievementPojo.toEntity(achievementPojo));
         return achievementPojo;
+    }
+
+    public void updateAchievement(long id, AchievementPojo pojo) {
+        Achievement achievement = achievementRepository.findById(id);
+        if (achievement != null) {
+            achievement.setName(pojo.getName());
+            achievement.setRecvDate(pojo.getRecvDate());
+            achievementRepository.save(achievement);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.coursework.sportachievements.service;
 
+import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.dto.SportsmanPojo;
 import com.coursework.sportachievements.entity.Sportsman;
 import com.coursework.sportachievements.repository.SportsmanRepository;
@@ -46,5 +47,13 @@ public class SportsmanService {
     public SportsmanPojo createSportsman(SportsmanPojo sportsmanPojo) {
         sportsmanRepository.save(SportsmanPojo.toEntity(sportsmanPojo));
         return sportsmanPojo;
+    }
+
+    public void updateSportsman(long id, SportsmanPojo pojo) {
+        Sportsman sportsman = sportsmanRepository.findById(id);
+        if (sportsman != null) {
+            SportsmanPojo.setSportsmanData(sportsman, pojo);
+            sportsmanRepository.save(sportsman);
+        }
     }
 }

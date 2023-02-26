@@ -1,6 +1,7 @@
 package com.coursework.sportachievements.service;
 
 import com.coursework.sportachievements.dto.ContactPojo;
+import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.entity.Contact;
 import com.coursework.sportachievements.repository.ContactRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,5 +57,14 @@ public class ContactService {
     public ContactPojo createContact(ContactPojo contactPojo) {
         contactRepository.save(ContactPojo.toEntity(contactPojo));
         return contactPojo;
+    }
+
+    public void updateContact(long id, ContactPojo pojo) {
+        Contact contact = contactRepository.findById(id);
+        if (contact != null) {
+            contact.setEmail(pojo.getEmail());
+            contact.setPhone(pojo.getPhone());
+            contactRepository.save(contact);
+        }
     }
 }

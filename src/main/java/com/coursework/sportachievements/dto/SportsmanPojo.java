@@ -50,11 +50,7 @@ public class SportsmanPojo {
     public static Sportsman toEntity(SportsmanPojo pojo) {
         Sportsman sportsman = new Sportsman();
         sportsman.setId(pojo.getId());
-        sportsman.setPassport(pojo.getPassport());
-        sportsman.setLastName(pojo.getLastName());
-        sportsman.setFirstName(pojo.getFirstName());
-        sportsman.setMiddleName(pojo.getMiddleName());
-        sportsman.setBirthdate(pojo.getBirthdate());
+        setSportsmanData(sportsman, pojo);
 
         if (pojo.getContacts() != null) {
             List<Contact> contacts = new ArrayList<>();
@@ -77,6 +73,14 @@ public class SportsmanPojo {
         }
 
         return sportsman;
+    }
+
+    public static void setSportsmanData(Sportsman sportsman, SportsmanPojo pojo) {
+        sportsman.setPassport(pojo.getPassport());
+        sportsman.setLastName(pojo.getLastName());
+        sportsman.setFirstName(pojo.getFirstName());
+        sportsman.setMiddleName(pojo.getMiddleName());
+        sportsman.setBirthdate(pojo.getBirthdate());
     }
 
     public static List<SportsmanPojo> convertSportsmenToPojo(List<Sportsman> sportsmen) {
