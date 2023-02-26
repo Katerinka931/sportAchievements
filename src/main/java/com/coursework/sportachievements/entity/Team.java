@@ -1,0 +1,25 @@
+package com.coursework.sportachievements.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Entity
+@Table(name = "team", schema = "public")
+@Getter
+@Setter
+public class Team {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "name", columnDefinition = "text", length = 150, nullable = false, unique = true)
+    private String name;
+
+    private int count;
+
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Sportsman> sportsmen;
+}
