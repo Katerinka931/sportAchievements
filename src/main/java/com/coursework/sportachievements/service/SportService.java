@@ -51,7 +51,8 @@ public class SportService {
     }
 
     public SportPojo createSport(SportPojo sportPojo) {
-        return null;
+        sportRepository.save(SportPojo.toEntity(sportPojo));
+        return sportPojo;
     }
 }
 

@@ -56,6 +56,7 @@ public class AchievementService {
     }
 
     public AchievementPojo createAchievement(AchievementPojo achievementPojo) {
-        return null;
+        achievementRepository.save(AchievementPojo.toEntity(achievementPojo));
+        return achievementPojo;
     }
 }

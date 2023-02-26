@@ -54,6 +54,7 @@ public class TeamService {
     }
 
     public TeamPojo createTeam(TeamPojo teamPojo) {
-        return null;
+        teamRepository.save(TeamPojo.toEntity(teamPojo));
+        return teamPojo;
     }
 }

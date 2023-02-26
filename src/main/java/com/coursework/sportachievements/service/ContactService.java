@@ -54,6 +54,7 @@ public class ContactService {
     }
 
     public ContactPojo createContact(ContactPojo contactPojo) {
-        return null;
+        contactRepository.save(ContactPojo.toEntity(contactPojo));
+        return contactPojo;
     }
 }
