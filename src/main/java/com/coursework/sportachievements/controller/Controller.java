@@ -27,11 +27,13 @@ public class Controller {
     }
 
     @GetMapping("/sport")
+    @ResponseBody
     public List<SportPojo> findAllSports() {
         return sportService.findAll();
     }
 
     @GetMapping("/sport/{name}")
+    @ResponseBody
     public SportPojo findSportByName(@PathVariable String name) {
         return sportService.findSportByName(name);
     }
@@ -82,27 +84,29 @@ public class Controller {
     }
 
     @PostMapping("/sport")
-    public ResponseEntity<SportPojo> createSport(@RequestBody SportPojo sportPojo) {
+    @ResponseBody
+    public SportPojo createSport(@RequestBody SportPojo sportPojo) {
         return sportService.createSport(sportPojo);
     }
 
     @PostMapping("/team")
-    public ResponseEntity<TeamPojo> createTeam(@RequestBody TeamPojo teamPojo) {
+    @ResponseBody
+    public TeamPojo createTeam(@RequestBody TeamPojo teamPojo) {
         return teamService.createTeam(teamPojo);
     }
 
     @PostMapping("/sportsman")
-    public ResponseEntity<SportsmanPojo> createSportsman(@RequestBody SportsmanPojo sportsmanPojo) {
+    public SportsmanPojo createSportsman(@RequestBody SportsmanPojo sportsmanPojo) {
         return sportsmanService.createSportsman(sportsmanPojo);
     }
 
     @PostMapping("/contact")
-    public ResponseEntity<ContactPojo> createContact(@RequestBody ContactPojo contactPojo) {
+    public ContactPojo createContact(@RequestBody ContactPojo contactPojo) {
         return contactService.createContact(contactPojo);
     }
 
     @PostMapping("/achievement")
-    public ResponseEntity<AchievementPojo> createAchievement(@RequestBody AchievementPojo achievementPojo) {
+    public AchievementPojo createAchievement(@RequestBody AchievementPojo achievementPojo) {
         return achievementService.createAchievement(achievementPojo);
     }
 
@@ -111,19 +115,5 @@ public class Controller {
     //  как сделать доступ для админского контроллера?
     //  как разделять контроллеры? по ролям или по сущностям? (наверное по сущностям)
     //  как избавиться от дупликатов (например, метод delete)
+    //  как лучше возвращать объект в ангуляр? @ResponseBody или ResponseEntity<>
 }
- /*try {
-            Optional<Player> playerData = playerRepository.findById(player.getId());
-            if (playerData.isEmpty()) {
-                if (Objects.equals(player.getFirstName(), "") || Objects.equals(player.getLastName(), "") || Objects.equals(player.getMiddleName(), "") || Objects.equals(player.getDateOfBirth(), "") || Objects.equals(player.getTeamName(), "")) {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                } else {
-                    Player _player = playerRepository.save(new Player(player.getTeamName(), player.getFirstName(), player.getLastName(), player.getMiddleName(), player.getDateOfBirth()));
-                    return new ResponseEntity<>(_player, HttpStatus.CREATED);
-                }
-            } else {
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }*/

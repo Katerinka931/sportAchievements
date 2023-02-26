@@ -5,7 +5,6 @@ import com.coursework.sportachievements.entity.Team;
 import com.coursework.sportachievements.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -54,7 +53,7 @@ public class TeamService {
         }
     }
 
-    public ResponseEntity<TeamPojo> createTeam(TeamPojo teamPojo) {
+    public TeamPojo createTeam(TeamPojo teamPojo) {
         return null;
     }
 }

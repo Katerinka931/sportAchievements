@@ -43,7 +43,7 @@ public class SportsmanService {
         }
     }
 
-    public ResponseEntity<SportsmanPojo> createSportsman(SportsmanPojo sportsmanPojo) {
+    public SportsmanPojo createSportsman(SportsmanPojo sportsmanPojo) {
         return null;
     }
 }

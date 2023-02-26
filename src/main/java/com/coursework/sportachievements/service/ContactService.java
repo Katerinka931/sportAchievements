@@ -53,7 +53,7 @@ public class ContactService {
         }
     }
 
-    public ResponseEntity<ContactPojo> createContact(ContactPojo contactPojo) {
+    public ContactPojo createContact(ContactPojo contactPojo) {
         return null;
     }
 }

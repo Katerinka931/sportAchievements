@@ -50,7 +50,7 @@ public class SportService {
         }
     }
 
-    public ResponseEntity<SportPojo> createSport(SportPojo sportPojo) {
+    public SportPojo createSport(SportPojo sportPojo) {
         return null;
     }
 }
