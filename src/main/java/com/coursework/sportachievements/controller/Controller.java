@@ -38,49 +38,9 @@ public class Controller {
         return sportService.findSportByName(name);
     }
 
-    @GetMapping("/sportsmen")
-    public List<SportsmanPojo> findAllSportsmen() {
-        return sportsmanService.findAll();
-    }
-
-    @GetMapping("/contacts")
-    public List<ContactPojo> findAllContacts() {
-        return contactService.findAll();
-    }
-
-    @GetMapping("/teams")
-    public List<TeamPojo> findAllTeams() {
-        return teamService.findAll();
-    }
-
-    @GetMapping("/achievements")
-    public List<AchievementPojo> findAllAchievements() {
-        return achievementService.findAll();
-    }
-
     @DeleteMapping("/sport/{id}")
     public ResponseEntity<HttpStatus> deleteSport(@PathVariable long id) {
         return sportService.deleteSport(id);
-    }
-
-    @DeleteMapping("/team/{id}")
-    public ResponseEntity<HttpStatus> deleteTeam(@PathVariable long id) {
-        return teamService.deleteTeam(id);
-    }
-
-    @DeleteMapping("/sportsman/{id}")
-    public ResponseEntity<HttpStatus> deleteSportsman(@PathVariable long id) {
-        return sportsmanService.deleteSportsman(id);
-    }
-
-    @DeleteMapping("/contact/{id}")
-    public ResponseEntity<HttpStatus> deleteContact(@PathVariable long id) {
-        return contactService.deleteContact(id);
-    }
-
-    @DeleteMapping("/achievement/{id}")
-    public ResponseEntity<HttpStatus> deleteAchievement(@PathVariable long id) {
-        return achievementService.deleteAchievement(id);
     }
 
     @PostMapping("/sport")
@@ -89,30 +49,25 @@ public class Controller {
         return sportService.createSport(sportPojo);
     }
 
+    @PutMapping("/sport/{id}")
+    public void updateSport(@PathVariable long id, @RequestBody SportPojo pojo) {
+        sportService.updateSport(id, pojo);
+    }
+
+    @GetMapping("/team")
+    public List<TeamPojo> findAllTeams() {
+        return teamService.findAll();
+    }
+
+    @DeleteMapping("/team/{id}")
+    public ResponseEntity<HttpStatus> deleteTeam(@PathVariable long id) {
+        return teamService.deleteTeam(id);
+    }
+
     @PostMapping("/team")
     @ResponseBody
     public TeamPojo createTeam(@RequestBody TeamPojo teamPojo) {
         return teamService.createTeam(teamPojo);
-    }
-
-    @PostMapping("/sportsman")
-    public SportsmanPojo createSportsman(@RequestBody SportsmanPojo sportsmanPojo) {
-        return sportsmanService.createSportsman(sportsmanPojo);
-    }
-
-    @PostMapping("/contact")
-    public ContactPojo createContact(@RequestBody ContactPojo contactPojo) {
-        return contactService.createContact(contactPojo);
-    }
-
-    @PostMapping("/achievement")
-    public AchievementPojo createAchievement(@RequestBody AchievementPojo achievementPojo) {
-        return achievementService.createAchievement(achievementPojo);
-    }
-
-    @PutMapping("/sport/{id}")
-    public void updateSport(@PathVariable long id, @RequestBody SportPojo pojo) {
-        sportService.updateSport(id, pojo);
     }
 
     @PutMapping("/team/{id}")
@@ -120,14 +75,59 @@ public class Controller {
         teamService.updateTeam(id, pojo);
     }
 
+    @GetMapping("/sportsmen")
+    public List<SportsmanPojo> findAllSportsmen() {
+        return sportsmanService.findAll();
+    }
+
+    @DeleteMapping("/sportsman/{id}")
+    public ResponseEntity<HttpStatus> deleteSportsman(@PathVariable long id) {
+        return sportsmanService.deleteSportsman(id);
+    }
+
+    @PostMapping("/sportsman")
+    public SportsmanPojo createSportsman(@RequestBody SportsmanPojo sportsmanPojo) {
+        return sportsmanService.createSportsman(sportsmanPojo);
+    }
+
     @PutMapping("/sportsman/{id}")
     public void updateSportsman(@PathVariable long id, @RequestBody SportsmanPojo pojo) {
         sportsmanService.updateSportsman(id, pojo);
     }
 
+    @GetMapping("/contacts")
+    public List<ContactPojo> findAllContacts() {
+        return contactService.findAll();
+    }
+
+    @DeleteMapping("/contact/{id}")
+    public ResponseEntity<HttpStatus> deleteContact(@PathVariable long id) {
+        return contactService.deleteContact(id);
+    }
+
+    @PostMapping("/contact")
+    public ContactPojo createContact(@RequestBody ContactPojo contactPojo) {
+        return contactService.createContact(contactPojo);
+    }
+
     @PutMapping("/contact/{id}")
     public void updateContact(@PathVariable long id, @RequestBody ContactPojo pojo) {
         contactService.updateContact(id, pojo);
+    }
+
+    @GetMapping("/achievements")
+    public List<AchievementPojo> findAllAchievements() {
+        return achievementService.findAll();
+    }
+
+    @DeleteMapping("/achievement/{id}")
+    public ResponseEntity<HttpStatus> deleteAchievement(@PathVariable long id) {
+        return achievementService.deleteAchievement(id);
+    }
+
+    @PostMapping("/achievement")
+    public AchievementPojo createAchievement(@RequestBody AchievementPojo achievementPojo) {
+        return achievementService.createAchievement(achievementPojo);
     }
 
     @PutMapping("/achievement/{id}")

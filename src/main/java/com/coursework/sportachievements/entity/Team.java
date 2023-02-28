@@ -22,4 +22,8 @@ public class Team {
 
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Sportsman> sportsmen;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "sport_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Sport sport;
 }
