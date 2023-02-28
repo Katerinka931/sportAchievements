@@ -45,8 +45,8 @@ public class SportsmanService {
     }
 
     public SportsmanPojo createSportsman(SportsmanPojo sportsmanPojo) {
-        sportsmanRepository.save(SportsmanPojo.toEntity(sportsmanPojo));
-        return sportsmanPojo;
+        Sportsman sportsman = sportsmanRepository.save(SportsmanPojo.toEntity(sportsmanPojo));
+        return SportsmanPojo.fromEntity(sportsman);
     }
 
     public void updateSportsman(long id, SportsmanPojo pojo) {

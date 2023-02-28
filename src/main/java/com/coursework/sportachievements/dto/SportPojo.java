@@ -3,6 +3,7 @@ package com.coursework.sportachievements.dto;
 import com.coursework.sportachievements.entity.Sport;
 import com.coursework.sportachievements.entity.Sportsman;
 
+import com.coursework.sportachievements.entity.Team;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public class SportPojo {
     private long id;
     private String name;
     private List<SportsmanPojo> sportsmen;
+    private List<TeamPojo> teams;
 
     public static SportPojo fromEntity(Sport sport) {
         SportPojo pojo = new SportPojo();
@@ -26,6 +28,13 @@ public class SportPojo {
             pojo.setSportsmen(sportsmen);
             for (Sportsman sportsman : sport.getSportsmen()) {
                 sportsmen.add(SportsmanPojo.fromEntity(sportsman));
+            }
+        }
+        if (sport.getTeams() != null) {
+            List<TeamPojo> teams = new ArrayList<>();
+            pojo.setTeams(teams);
+            for (Team team : sport.getTeams()) {
+                teams.add(TeamPojo.fromEntity(team));
             }
         }
         return pojo;
@@ -43,6 +52,15 @@ public class SportPojo {
                 Sportsman sportsman = SportsmanPojo.toEntity(sportsmanPojo);
                 sportsman.setSport(sport);
                 sportsmen.add(sportsman);
+            }
+        }
+        if (pojo.getTeams() != null) {
+            List<Team> teams = new ArrayList<>();
+            sport.setTeams(teams);
+            for (TeamPojo teamPojoo : pojo.getTeams()) {
+                Team team = TeamPojo.toEntity(teamPojoo);
+                team.setTeamsSport(sport);
+                teams.add(team);
             }
         }
         return sport;

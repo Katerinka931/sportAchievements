@@ -51,8 +51,8 @@ public class SportService {
     }
 
     public SportPojo createSport(SportPojo sportPojo) {
-        sportRepository.save(SportPojo.toEntity(sportPojo));
-        return sportPojo;
+        Sport sport = sportRepository.save(SportPojo.toEntity(sportPojo));
+        return SportPojo.fromEntity(sport);
     }
 
     public void updateSport(long id, SportPojo pojo) {

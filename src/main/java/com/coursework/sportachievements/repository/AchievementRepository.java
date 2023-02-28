@@ -14,7 +14,7 @@ public interface AchievementRepository extends JpaRepository<Achievement, Long> 
 
     List<Achievement> findAllByRecvDate(Date recvDate);
 
-    List<Achievement> findAllBySportsman(Sportsman sportsman);
+    List<Achievement> findAllByAchSportsman(Sportsman sportsman);
 
     void deleteById(long id);
 }

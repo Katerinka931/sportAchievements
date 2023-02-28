@@ -55,8 +55,8 @@ public class TeamService {
     }
 
     public TeamPojo createTeam(TeamPojo teamPojo) {
-        teamRepository.save(TeamPojo.toEntity(teamPojo));
-        return teamPojo;
+        Team team = teamRepository.save(TeamPojo.toEntity(teamPojo));
+        return TeamPojo.fromEntity(team);
     }
 
     public void updateTeam(long id, TeamPojo pojo) {

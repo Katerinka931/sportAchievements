@@ -55,8 +55,8 @@ public class ContactService {
     }
 
     public ContactPojo createContact(ContactPojo contactPojo) {
-        contactRepository.save(ContactPojo.toEntity(contactPojo));
-        return contactPojo;
+        Contact contact = contactRepository.save(ContactPojo.toEntity(contactPojo));
+        return ContactPojo.fromEntity(contact);
     }
 
     public void updateContact(long id, ContactPojo pojo) {

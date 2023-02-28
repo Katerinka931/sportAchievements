@@ -21,6 +21,6 @@ public class Sport {
     @OneToMany(mappedBy = "sport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Sportsman> sportsmen;
 
-    @OneToMany(mappedBy = "sport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "teamsSport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Team> teams;
 }

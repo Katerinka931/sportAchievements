@@ -67,7 +67,7 @@ public class SportsmanPojo {
             sportsman.setAchievements(achievements);
             for (AchievementPojo achievementPojo : pojo.getAchievements()) {
                 Achievement achievement = AchievementPojo.toEntity(achievementPojo);
-                achievement.setSportsman(sportsman);
+                achievement.setAchSportsman(sportsman);
                 achievements.add(achievement);
             }
         }

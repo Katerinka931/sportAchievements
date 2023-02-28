@@ -21,5 +21,5 @@ public class Achievement {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "sportsman_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Sportsman sportsman;
+    private Sportsman achSportsman;
 }

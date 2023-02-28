@@ -34,6 +34,6 @@ public class Sportsman {
     @OneToMany(mappedBy = "sportsman", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Contact> contacts;
 
-    @OneToMany(mappedBy = "sportsman", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "achSportsman", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Achievement> achievements;
 }
