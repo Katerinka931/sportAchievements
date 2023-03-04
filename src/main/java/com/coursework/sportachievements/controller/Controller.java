@@ -1,6 +1,7 @@
 package com.coursework.sportachievements.controller;
 
 import com.coursework.sportachievements.dto.*;
+import com.coursework.sportachievements.entity.Achievement;
 import com.coursework.sportachievements.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,14 +96,34 @@ public class Controller {
         return sportsmanService.deleteSportsman(id);
     }
 
-    @PostMapping("/sportsmen")//todo return with id
+    @PostMapping("/sportsmen")
     public SportsmanPojo createSportsman(@RequestBody SportsmanPojo sportsmanPojo) {
         return sportsmanService.createSportsman(sportsmanPojo);
+    }
+
+    @PostMapping("/sportsmen/{sportsmanId}/contacts")
+    public ContactPojo createContact(@RequestBody ContactPojo pojo, @PathVariable long sportsmanId) {
+        return sportsmanService.createContact(sportsmanId, pojo);
+    }
+
+    @PostMapping("/sportsmen/{sportsmanId}/achievements")
+    public AchievementPojo createAchievement(@RequestBody AchievementPojo pojo, @PathVariable long sportsmanId) {
+        return sportsmanService.createAchievement(sportsmanId, pojo);
     }
 
     @PutMapping("/sportsmen/{id}")
     public void updateSportsman(@PathVariable long id, @RequestBody SportsmanPojo pojo) {
         sportsmanService.updateSportsman(id, pojo);
+    }
+
+    @PutMapping("/sportsmen/{sportsmanId}/contacts/{contactId}")
+    public void updateContact(@PathVariable long contactId, @PathVariable long sportsmanId, @RequestBody ContactPojo pojo) {
+        sportsmanService.updateContact(contactId, sportsmanId, pojo);
+    }
+
+    @PutMapping("/sportsmen/{sportsmanId}/achievements/{achievementId}")
+    public void updateAchievement(@PathVariable long achievementId, @PathVariable long sportsmanId, @RequestBody AchievementPojo pojo) {
+        sportsmanService.updateAchievement(achievementId, sportsmanId, pojo);
     }
 
     //------------- Contacts

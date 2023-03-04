@@ -70,11 +70,45 @@ public class SportsmanService {
         return SportsmanPojo.fromEntity(sportsman);
     }
 
-    public void updateSportsman(long id, SportsmanPojo pojo) {
-        Sportsman sportsman = sportsmanRepository.findById(id);
+    public ContactPojo createContact(long sportsmanId, ContactPojo pojo) {
+        Contact contact = ContactPojo.toEntity(pojo);
+        contact.setSportsman(sportsmanRepository.findById(sportsmanId));
+        contactRepository.save(contact);
+        return ContactPojo.fromEntity(contact);
+    }
+
+    public AchievementPojo createAchievement(long sportsmanId, AchievementPojo pojo) {
+        Achievement achievement = AchievementPojo.toEntity(pojo);
+        achievement.setAchSportsman(sportsmanRepository.findById(sportsmanId));
+        achievementRepository.save(achievement);
+        return AchievementPojo.fromEntity(achievement);
+    }
+
+    public void updateSportsman(long pk, SportsmanPojo pojo) {
+        Sportsman sportsman = sportsmanRepository.findById(pk);
         if (sportsman != null) {
             SportsmanPojo.setSportsmanData(sportsman, pojo);
             sportsmanRepository.save(sportsman);
+        }
+    }
+
+    public void updateContact(long contactId, long sportsmanId, ContactPojo pojo) {
+        Contact contact = contactRepository.findById(contactId);
+        if (contact != null) {
+            contact.setEmail(pojo.getEmail());
+            contact.setPhone(pojo.getPhone());
+            contact.setSportsman(sportsmanRepository.findById(sportsmanId));
+            contactRepository.save(contact);
+        }
+    }
+
+    public void updateAchievement(long achievementId, long sportsmanId, AchievementPojo pojo) {
+        Achievement achievement = achievementRepository.findById(achievementId);
+        if (achievement != null) {
+            achievement.setName(pojo.getName());
+            achievement.setRecvDate(pojo.getRecvDate());
+            achievement.setAchSportsman(sportsmanRepository.findById(sportsmanId));
+            achievementRepository.save(achievement);
         }
     }
 }
