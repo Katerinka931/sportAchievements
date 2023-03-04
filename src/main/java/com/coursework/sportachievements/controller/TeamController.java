@@ -44,8 +44,18 @@ public class TeamController {
         return teamService.createTeam(teamPojo);
     }
 
+    @PostMapping("{teamId}/sportsman")
+    public SportsmanPojo createSportsman(@PathVariable long teamId, @RequestBody SportsmanPojo pojo) {
+        return teamService.createSportsman(teamId, pojo);
+    }
+
     @PutMapping("/{id}")
     public void updateTeam(@PathVariable long id, @RequestBody TeamPojo pojo) {
         teamService.updateTeam(id, pojo);
+    }
+
+    @PutMapping("/{teamId}/sportsman/{sportsmanId}")
+    public void updateSportsman(@PathVariable long teamId, @PathVariable long sportsmanId, @RequestBody SportsmanPojo pojo) {
+        teamService.updateSportsman(teamId, sportsmanId, pojo);
     }
 }

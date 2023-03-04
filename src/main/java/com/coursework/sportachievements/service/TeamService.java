@@ -2,8 +2,10 @@ package com.coursework.sportachievements.service;
 
 import com.coursework.sportachievements.dto.SportsmanPojo;
 import com.coursework.sportachievements.dto.TeamPojo;
+import com.coursework.sportachievements.entity.Sport;
 import com.coursework.sportachievements.entity.Sportsman;
 import com.coursework.sportachievements.entity.Team;
+import com.coursework.sportachievements.repository.SportRepository;
 import com.coursework.sportachievements.repository.SportsmanRepository;
 import com.coursework.sportachievements.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +22,13 @@ public class TeamService {
     private TeamRepository teamRepository;
     private SportsmanRepository sportsmanRepository;
 
+    private SportRepository sportRepository;
+
     @Autowired
-    public TeamService(TeamRepository teamRepository, SportsmanRepository sportsmanRepository) {
+    public TeamService(TeamRepository teamRepository, SportsmanRepository sportsmanRepository, SportRepository sportRepository) {
         this.teamRepository = teamRepository;
         this.sportsmanRepository = sportsmanRepository;
+        this.sportRepository = sportRepository;
     }
 
     public List<TeamPojo> findAll() {
@@ -65,12 +70,31 @@ public class TeamService {
         return TeamPojo.fromEntity(team);
     }
 
+    public SportsmanPojo createSportsman(long teamId, SportsmanPojo pojo) {
+        Sportsman sportsman = SportsmanPojo.toEntity(pojo);
+        Team team = teamRepository.findById(teamId);
+        Sport sport = sportRepository.findById(team.getTeamsSport().getId());
+        sportsman.setTeam(team);
+        sportsman.setSport(sport);
+        sportsmanRepository.save(sportsman);
+        return SportsmanPojo.fromEntity(sportsman);
+    }
+
     public void updateTeam(long id, TeamPojo pojo) {
         Team team = teamRepository.findById(id);
         if (team != null) {
             team.setName(pojo.getName());
             team.setCount(pojo.getCount());
             teamRepository.save(team);
+        }
+    }
+
+    public void updateSportsman(long teamId, long sportsmanId, SportsmanPojo pojo) {
+        Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
+        if (sportsman != null) {
+            SportsmanPojo.setSportsmanData(sportsman, pojo);
+            sportsman.setTeam(teamRepository.findById(teamId));
+            sportsmanRepository.save(sportsman);
         }
     }
 }
