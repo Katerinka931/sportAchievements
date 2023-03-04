@@ -2,6 +2,7 @@ package com.coursework.sportachievements.controller;
 
 import com.coursework.sportachievements.dto.SportsmanPojo;
 import com.coursework.sportachievements.dto.TeamPojo;
+import com.coursework.sportachievements.service.SportsmanService;
 import com.coursework.sportachievements.service.TeamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,11 @@ import java.util.List;
 @RequestMapping("/api/team")
 public class TeamController {
     private final TeamService teamService;
+    private final SportsmanService sportsmanService;
 
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, SportsmanService sportsmanService) {
         this.teamService = teamService;
+        this.sportsmanService = sportsmanService;
     }
 
     @GetMapping
@@ -33,9 +36,24 @@ public class TeamController {
         return teamService.findSportsmen(pk);
     }
 
+    @GetMapping("/count")
+    public List<TeamPojo> findByCountOfParticipants(@RequestParam int min, @RequestParam int max) {
+        return teamService.findByCount(min, max);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTeam(@PathVariable long id) {
         return teamService.deleteTeam(id);
+    }
+
+    @DeleteMapping("/sportsmen/{id}")
+    public boolean deleteSportsman(@PathVariable long id) {
+        if (sportsmanService.findById(id) == null) {
+            return false;
+        }
+
+        sportsmanService.deleteSportsman(id);
+        return true;
     }
 
     @PostMapping

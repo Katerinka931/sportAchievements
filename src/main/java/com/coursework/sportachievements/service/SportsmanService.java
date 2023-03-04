@@ -107,4 +107,8 @@ public class SportsmanService {
             achievementRepository.save(achievement);
         }
     }
+
+    public SportsmanPojo findById(long id) {
+        return SportsmanPojo.fromEntity(sportsmanRepository.findById(id));
+    }
 }

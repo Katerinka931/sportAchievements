@@ -3,6 +3,8 @@ package com.coursework.sportachievements.controller;
 import com.coursework.sportachievements.dto.AchievementPojo;
 import com.coursework.sportachievements.dto.ContactPojo;
 import com.coursework.sportachievements.dto.SportsmanPojo;
+import com.coursework.sportachievements.service.AchievementService;
+import com.coursework.sportachievements.service.ContactService;
 import com.coursework.sportachievements.service.SportsmanService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,13 @@ import java.util.List;
 @RequestMapping("/api/sportsmen")
 public class SportsmanController {
     private final SportsmanService sportsmanService;
+    private final ContactService contactService;
+    private final AchievementService achievementService;
 
-    public SportsmanController(SportsmanService sportsmanService) {
+    public SportsmanController(SportsmanService sportsmanService, ContactService contactService, AchievementService achievementService) {
         this.sportsmanService = sportsmanService;
+        this.contactService = contactService;
+        this.achievementService = achievementService;
     }
 
     @GetMapping
@@ -37,6 +43,26 @@ public class SportsmanController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteSportsman(@PathVariable long id) {
         return sportsmanService.deleteSportsman(id);
+    }
+
+    @DeleteMapping("/contact/{id}")
+    public boolean deleteContact(@PathVariable long id) {
+        if (contactService.findById(id) != null) {
+            return false;
+        }
+
+        contactService.deleteContact(id);
+        return true;
+    }
+
+    @DeleteMapping("/achievement/{id}")
+    public boolean deleteAchievement(@PathVariable long id) {
+        if (achievementService.findById(id) != null) {
+            return false;
+        }
+
+        achievementService.deleteAchievement(id);
+        return true;
     }
 
     @PostMapping

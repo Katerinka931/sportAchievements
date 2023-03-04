@@ -12,7 +12,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Team findById(long id);
 
-    List<Team> findByCount(int count);
+    List<Team> findByCountGreaterThanAndCountLessThan(int count, int count2);
 
     List<Team> findByTeamsSport(Sport teamsSport);
 

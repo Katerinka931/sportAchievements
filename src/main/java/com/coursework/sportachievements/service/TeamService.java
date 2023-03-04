@@ -41,14 +41,18 @@ public class TeamService {
         return TeamPojo.convertTeamsToPojo(teams);
     }
 
+    public TeamPojo findById(long pk) {
+        return TeamPojo.fromEntity(teamRepository.findById(pk));
+    }
+
     public List<SportsmanPojo> findSportsmen(long pk) {
         Team team = teamRepository.findById(pk);
         List<Sportsman> sportsmen = sportsmanRepository.findAllByTeam(team);
         return SportsmanPojo.convertSportsmenToPojo(sportsmen);
     }
 
-    public List<TeamPojo> findByCount(int count) {
-        List<Team> teams = teamRepository.findByCount(count);
+    public List<TeamPojo> findByCount(int min, int max) {
+        List<Team> teams = teamRepository.findByCountGreaterThanAndCountLessThan(min, max);
         return TeamPojo.convertTeamsToPojo(teams);
     }
 
@@ -93,7 +97,15 @@ public class TeamService {
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
         if (sportsman != null) {
             SportsmanPojo.setSportsmanData(sportsman, pojo);
-            sportsman.setTeam(teamRepository.findById(teamId));
+            Team team = teamRepository.findById(teamId);
+            sportsman.setTeam(team);
+
+            Sport sport = team.getTeamsSport();
+            if (sport != null) {
+                sportsman.setSport(sportRepository.findById(sport.getId()));
+            } else {
+                sportsman.setSport(null);
+            }
             sportsmanRepository.save(sportsman);
         }
     }

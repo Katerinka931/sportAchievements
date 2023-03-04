@@ -80,6 +80,13 @@ public class SportService {
         return TeamPojo.fromEntity(team);
     }
 
+    public SportsmanPojo createSportsman(long sportId, SportsmanPojo pojo) {
+        Sportsman sportsman = SportsmanPojo.toEntity(pojo);
+        sportsman.setSport(sportRepository.findById(sportId));
+        sportsmanRepository.save(sportsman);
+        return SportsmanPojo.fromEntity(sportsman);
+    }
+
     public void updateSport(long id, SportPojo pojo) {
         Sport sport = sportRepository.findById(id);
         if (sport != null) {
@@ -95,6 +102,15 @@ public class SportService {
             team.setName(pojo.getName());
             team.setTeamsSport(sportRepository.findById(sportId));
             teamRepository.save(team);
+        }
+    }
+
+    public void updateSportsman(long sportId, long sportsmanId, SportsmanPojo pojo) {
+        Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
+        if (sportsman != null) {
+            SportsmanPojo.setSportsmanData(sportsman, pojo);
+            sportsman.setSport(sportRepository.findById(sportId));
+            sportsmanRepository.save(sportsman);
         }
     }
 }
