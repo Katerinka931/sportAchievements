@@ -2,10 +2,13 @@ package com.coursework.sportachievements.service;
 
 import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.dto.SportsmanPojo;
+import com.coursework.sportachievements.dto.TeamPojo;
 import com.coursework.sportachievements.entity.Sport;
 import com.coursework.sportachievements.entity.Sportsman;
+import com.coursework.sportachievements.entity.Team;
 import com.coursework.sportachievements.repository.SportRepository;
 import com.coursework.sportachievements.repository.SportsmanRepository;
+import com.coursework.sportachievements.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +25,13 @@ public class SportService {
 
     private SportsmanRepository sportsmanRepository;
 
+    private TeamRepository teamRepository;
+
     @Autowired
-    public SportService(SportRepository sportRepository, SportsmanRepository sportsmanRepository) {
+    public SportService(SportRepository sportRepository, SportsmanRepository sportsmanRepository, TeamRepository teamRepository) {
         this.sportRepository = sportRepository;
         this.sportsmanRepository = sportsmanRepository;
+        this.teamRepository = teamRepository;
     }
 
     public List<SportPojo> findAll() {
@@ -41,6 +47,12 @@ public class SportService {
         Sport sport = sportRepository.findById(pk);
         List<Sportsman> sportsmen = sportsmanRepository.findAllBySport(sport);
         return SportsmanPojo.convertSportsmenToPojo(sportsmen);
+    }
+
+    public List<TeamPojo> findTeams(long pk) {
+        Sport sport = sportRepository.findById(pk);
+        List<Team> teams = teamRepository.findByTeamsSport(sport);
+        return TeamPojo.convertTeamsToPojo(teams);
     }
 
     public ResponseEntity<HttpStatus> deleteSport(long id) {
@@ -61,11 +73,28 @@ public class SportService {
         return SportPojo.fromEntity(sport);
     }
 
+    public TeamPojo createTeam(long sportId, TeamPojo pojo) {
+        Team team = TeamPojo.toEntity(pojo);
+        team.setTeamsSport(sportRepository.findById(sportId));
+        teamRepository.save(team);
+        return TeamPojo.fromEntity(team);
+    }
+
     public void updateSport(long id, SportPojo pojo) {
         Sport sport = sportRepository.findById(id);
         if (sport != null) {
             sport.setName(pojo.getName());
             sportRepository.save(sport);
+        }
+    }
+
+    public void updateTeam(long sportId, long teamId, TeamPojo pojo) {
+        Team team = teamRepository.findById(teamId);
+        if (team != null) {
+            team.setCount(pojo.getCount());
+            team.setName(pojo.getName());
+            team.setTeamsSport(sportRepository.findById(sportId));
+            teamRepository.save(team);
         }
     }
 }

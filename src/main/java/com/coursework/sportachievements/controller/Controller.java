@@ -45,6 +45,11 @@ public class Controller {
         return sportService.findSportsmen(pk);
     }
 
+    @GetMapping("/sport/{pk}/teams")
+    public List<TeamPojo> findTeamBySport(@PathVariable long pk) {
+        return sportService.findTeams(pk);
+    }
+
     @DeleteMapping("/sport/{id}")
     public ResponseEntity<HttpStatus> deleteSport(@PathVariable long id) {
         return sportService.deleteSport(id);
@@ -56,12 +61,22 @@ public class Controller {
         return sportService.createSport(sportPojo);
     }
 
+    @PostMapping("/sport/{sportId}/team")
+    public TeamPojo createTeam(@RequestBody TeamPojo pojo, @PathVariable long sportId) {
+        return sportService.createTeam(sportId, pojo);
+    }
+
     @PutMapping("/sport/{id}")
     public void updateSport(@PathVariable long id, @RequestBody SportPojo pojo) {
         sportService.updateSport(id, pojo);
     }
 
-    //-------------
+    @PutMapping("/sport/{sportId}/team/{teamId}")
+    public void updateTeam(@PathVariable long sportId, @PathVariable long teamId, @RequestBody TeamPojo pojo) {
+        sportService.updateTeam(sportId, teamId, pojo);
+    }
+
+    //------------- Team
     @GetMapping("/team")
     public List<TeamPojo> findAllTeams() {
         return teamService.findAll();
