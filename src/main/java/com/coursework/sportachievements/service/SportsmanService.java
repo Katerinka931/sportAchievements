@@ -1,8 +1,13 @@
 package com.coursework.sportachievements.service;
 
-import com.coursework.sportachievements.dto.SportPojo;
+import com.coursework.sportachievements.dto.AchievementPojo;
+import com.coursework.sportachievements.dto.ContactPojo;
 import com.coursework.sportachievements.dto.SportsmanPojo;
+import com.coursework.sportachievements.entity.Achievement;
+import com.coursework.sportachievements.entity.Contact;
 import com.coursework.sportachievements.entity.Sportsman;
+import com.coursework.sportachievements.repository.AchievementRepository;
+import com.coursework.sportachievements.repository.ContactRepository;
 import com.coursework.sportachievements.repository.SportsmanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SportsmanService {
     private SportsmanRepository sportsmanRepository;
+    private AchievementRepository achievementRepository;
+    private ContactRepository contactRepository;
 
     @Autowired
-    public SportsmanService(SportsmanRepository sportsmanRepository) {
+    public SportsmanService(SportsmanRepository sportsmanRepository, AchievementRepository achievementRepository, ContactRepository contactRepository) {
         this.sportsmanRepository = sportsmanRepository;
+        this.achievementRepository = achievementRepository;
+        this.contactRepository = contactRepository;
     }
 
     public List<SportsmanPojo> findAll() {
@@ -29,6 +38,18 @@ public class SportsmanService {
 
     public SportsmanPojo findById(long pk) {
         return SportsmanPojo.fromEntity(sportsmanRepository.findById(pk));
+    }
+
+    public List<AchievementPojo> findAchievementsBySportsman(long sportsmanId) {
+        Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
+        List<Achievement> achievements = achievementRepository.findAllByAchSportsman(sportsman);
+        return AchievementPojo.convertAchievementsToPojo(achievements);
+    }
+
+    public List<ContactPojo> findContactsBySportsman(long sportsmanId) {
+        Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
+        List<Contact> contacts = contactRepository.findAllBySportsman(sportsman);
+        return ContactPojo.convertContactsToPojo(contacts);
     }
 
     public ResponseEntity<HttpStatus> deleteSportsman(long id) {

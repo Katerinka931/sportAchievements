@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -102,10 +105,25 @@ public class Controller {
         sportsmanService.updateSportsman(id, pojo);
     }
 
-    //-------------
+    //------------- Contacts
     @GetMapping("/contacts")
     public List<ContactPojo> findAllContacts() {
         return contactService.findAll();
+    }
+
+    @GetMapping("/contacts/phone")
+    public List<ContactPojo> findContactsByPhoneContaining(@RequestParam String phone) {
+        return contactService.findByPhone(phone);
+    }
+
+    @GetMapping("/contacts/email")
+    public List<ContactPojo> findContactsByEmailContaining(@RequestParam String email) {
+        return contactService.findByEmail(email);
+    }
+
+    @GetMapping("/contacts/sportsman/{pk}")
+    public List<ContactPojo> findContactsBySportsman(@PathVariable long pk) {
+        return sportsmanService.findContactsBySportsman(pk);
     }
 
     @DeleteMapping("/contacts/{id}")
@@ -123,10 +141,31 @@ public class Controller {
         contactService.updateContact(id, pojo);
     }
 
-    //-------------
+    //------------- Achievements
     @GetMapping("/achievements")
     public List<AchievementPojo> findAllAchievements() {
         return achievementService.findAll();
+    }
+
+    @GetMapping("/achievements/date")
+    public List<AchievementPojo> findAchievementsByDate(@RequestParam String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            return achievementService.findByReceiveDate(formatter.parse(date));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/achievements/name/{name}")
+    public List<AchievementPojo> findAchievementsByName(@PathVariable String name) {
+        return achievementService.findAllByName(name);
+    }
+
+    @GetMapping("/achievements/sportsman/{pk}")
+    public List<AchievementPojo> findAchievementsBySportsman(@PathVariable long pk) {
+        return sportsmanService.findAchievementsBySportsman(pk);
     }
 
     @DeleteMapping("/achievements/{id}")
@@ -134,7 +173,7 @@ public class Controller {
         return achievementService.deleteAchievement(id);
     }
 
-    @PostMapping("/achievements")//todo return with id
+    @PostMapping("/achievements")
     public AchievementPojo createAchievement(@RequestBody AchievementPojo achievementPojo) {
         return achievementService.createAchievement(achievementPojo);
     }
@@ -149,7 +188,6 @@ public class Controller {
     //  как сделать доступ для админского контроллера?
     //  как разделять контроллеры? по ролям или по сущностям? (наверное по сущностям)
     //  как избавиться от дупликатов (например, метод delete)
-    //  как лучше возвращать объект в ангуляр? @ResponseBody или ResponseEntity<>
     //  что возвращает update?
     //  проверки и ловля исключений при необходимости, заранее не писать
 }

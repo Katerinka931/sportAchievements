@@ -1,8 +1,8 @@
 package com.coursework.sportachievements.service;
 
 import com.coursework.sportachievements.dto.AchievementPojo;
-import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.entity.Achievement;
+import com.coursework.sportachievements.entity.Sportsman;
 import com.coursework.sportachievements.repository.AchievementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
