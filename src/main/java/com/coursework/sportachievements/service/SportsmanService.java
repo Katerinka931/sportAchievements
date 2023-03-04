@@ -36,10 +36,6 @@ public class SportsmanService {
         return SportsmanPojo.convertSportsmenToPojo(sportsmen);
     }
 
-    public SportsmanPojo findById(long pk) {
-        return SportsmanPojo.fromEntity(sportsmanRepository.findById(pk));
-    }
-
     public List<AchievementPojo> findAchievementsBySportsman(long sportsmanId) {
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
         List<Achievement> achievements = achievementRepository.findAllByAchSportsman(sportsman);
