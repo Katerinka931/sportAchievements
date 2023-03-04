@@ -1,8 +1,10 @@
 package com.coursework.sportachievements.service;
 
-import com.coursework.sportachievements.dto.SportPojo;
+import com.coursework.sportachievements.dto.SportsmanPojo;
 import com.coursework.sportachievements.dto.TeamPojo;
+import com.coursework.sportachievements.entity.Sportsman;
 import com.coursework.sportachievements.entity.Team;
+import com.coursework.sportachievements.repository.SportsmanRepository;
 import com.coursework.sportachievements.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamService {
     private TeamRepository teamRepository;
+    private SportsmanRepository sportsmanRepository;
 
     @Autowired
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, SportsmanRepository sportsmanRepository) {
         this.teamRepository = teamRepository;
+        this.sportsmanRepository = sportsmanRepository;
     }
 
     public List<TeamPojo> findAll() {
@@ -32,8 +36,10 @@ public class TeamService {
         return TeamPojo.convertTeamsToPojo(teams);
     }
 
-    public TeamPojo findById(long pk) {
-        return TeamPojo.fromEntity(teamRepository.findById(pk));
+    public List<SportsmanPojo> findSportsmen(long pk) {
+        Team team = teamRepository.findById(pk);
+        List<Sportsman> sportsmen = sportsmanRepository.findAllByTeam(team);
+        return SportsmanPojo.convertSportsmenToPojo(sportsmen);
     }
 
     public List<TeamPojo> findByCount(int count) {

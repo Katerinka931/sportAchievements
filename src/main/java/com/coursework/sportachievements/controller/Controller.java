@@ -1,7 +1,6 @@
 package com.coursework.sportachievements.controller;
 
 import com.coursework.sportachievements.dto.*;
-import com.coursework.sportachievements.entity.Achievement;
 import com.coursework.sportachievements.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -42,12 +40,17 @@ public class Controller {
         return sportService.findSportByName(name);
     }
 
+    @GetMapping("/sport/{pk}/sportsmen")
+    public List<SportsmanPojo> findSportsmenBySport(@PathVariable long pk) {
+        return sportService.findSportsmen(pk);
+    }
+
     @DeleteMapping("/sport/{id}")
     public ResponseEntity<HttpStatus> deleteSport(@PathVariable long id) {
         return sportService.deleteSport(id);
     }
 
-    @PostMapping("/sport") //todo return with id
+    @PostMapping("/sport")
     @ResponseBody
     public SportPojo createSport(@RequestBody SportPojo sportPojo) {
         return sportService.createSport(sportPojo);
@@ -69,12 +72,17 @@ public class Controller {
         return teamService.findAllByName(name);
     }
 
+    @GetMapping("/team/{pk}/sportsmen")
+    public List<SportsmanPojo> findSportsmenByTeam(@PathVariable long pk) {
+        return teamService.findSportsmen(pk);
+    }
+
     @DeleteMapping("/team/{id}")
     public ResponseEntity<HttpStatus> deleteTeam(@PathVariable long id) {
         return teamService.deleteTeam(id);
     }
 
-    @PostMapping("/team")//todo return with id
+    @PostMapping("/team")
     @ResponseBody
     public TeamPojo createTeam(@RequestBody TeamPojo teamPojo) {
         return teamService.createTeam(teamPojo);
@@ -85,10 +93,20 @@ public class Controller {
         teamService.updateTeam(id, pojo);
     }
 
-    //-------------
+    //------------- Sportsman
     @GetMapping("/sportsmen")
     public List<SportsmanPojo> findAllSportsmen() {
         return sportsmanService.findAll();
+    }
+
+    @GetMapping("/sportsmen/{pk}/contacts")
+    public List<ContactPojo> findContactsBySportsman(@PathVariable long pk) {
+        return sportsmanService.findContactsBySportsman(pk);
+    }
+
+    @GetMapping("/sportsmen/{pk}/achievements")
+    public List<AchievementPojo> findAchievementsBySportsman(@PathVariable long pk) {
+        return sportsmanService.findAchievementsBySportsman(pk);
     }
 
     @DeleteMapping("/sportsmen/{id}")
@@ -142,17 +160,12 @@ public class Controller {
         return contactService.findByEmail(email);
     }
 
-    @GetMapping("/contacts/sportsman/{pk}")
-    public List<ContactPojo> findContactsBySportsman(@PathVariable long pk) {
-        return sportsmanService.findContactsBySportsman(pk);
-    }
-
     @DeleteMapping("/contacts/{id}")
     public ResponseEntity<HttpStatus> deleteContact(@PathVariable long id) {
         return contactService.deleteContact(id);
     }
 
-    @PostMapping("/contacts")//todo return with id
+    @PostMapping("/contacts")
     public ContactPojo createContact(@RequestBody ContactPojo contactPojo) {
         return contactService.createContact(contactPojo);
     }
@@ -184,11 +197,6 @@ public class Controller {
         return achievementService.findAllByName(name);
     }
 
-    @GetMapping("/achievements/sportsman/{pk}")
-    public List<AchievementPojo> findAchievementsBySportsman(@PathVariable long pk) {
-        return sportsmanService.findAchievementsBySportsman(pk);
-    }
-
     @DeleteMapping("/achievements/{id}")
     public ResponseEntity<HttpStatus> deleteAchievement(@PathVariable long id) {
         return achievementService.deleteAchievement(id);
@@ -206,9 +214,10 @@ public class Controller {
     //-------------
 
     // todo можно ли использовать requestParam при поиске по одной и той же ссылке (или как осуществить поиск)
-    //  как сделать доступ для админского контроллера?
     //  как разделять контроллеры? по ролям или по сущностям? (наверное по сущностям)
+    //  поиск спортсмена по имени? по полному, или только по фамилии? как и что нужно вообще
+    //  как сделать доступ для админского контроллера?
     //  как избавиться от дупликатов (например, метод delete)
     //  что возвращает update?
-    //  проверки и ловля исключений при необходимости, заранее не писать
+    //  проверки и ловля исключений
 }
