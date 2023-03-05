@@ -109,7 +109,16 @@ public class SportService {
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
         if (sportsman != null) {
             SportsmanPojo.setSportsmanData(sportsman, pojo);
-            sportsman.setSport(sportRepository.findById(sportId));
+
+            Team team = sportsman.getTeam();
+            Sport sport = sportRepository.findById(sportId);
+            Sport teamsSport = sportRepository.findById(team.getTeamsSport().getId());
+
+            if (teamsSport.getId() == sport.getId()) {
+                sportsman.setSport(sport);
+            } else {
+                sportsman.setSport(team.getTeamsSport());
+            }
             sportsmanRepository.save(sportsman);
         }
     }
