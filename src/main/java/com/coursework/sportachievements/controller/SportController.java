@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api/sport")
 public class SportController {
@@ -25,7 +26,7 @@ public class SportController {
         this.teamService = teamService;
     }
 
-    @GetMapping("/sport")
+    @GetMapping
     @ResponseBody
     public List<SportPojo> findAllSports() {
         return sportService.findAll();

@@ -22,8 +22,3 @@
         }
     ]
 }
-
-
-ng g c components/comp-name
-
-ng g class models/tut-model/tutorial --type=model
