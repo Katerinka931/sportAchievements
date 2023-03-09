@@ -26,17 +26,17 @@ public class SportsmanController {
         this.achievementService = achievementService;
     }
 
-    @GetMapping
+    @GetMapping("/main")
     public List<SportsmanPojo> findAllSportsmen() {
         return sportsmanService.findAll();
     }
 
-    @GetMapping("/{pk}/contacts")
+    @GetMapping("/main/{pk}/contacts")
     public List<ContactPojo> findContactsBySportsman(@PathVariable long pk) {
         return sportsmanService.findContactsBySportsman(pk);
     }
 
-    @GetMapping("/{pk}/achievements")
+    @GetMapping("/main/{pk}/achievements")
     public List<AchievementPojo> findAchievementsBySportsman(@PathVariable long pk) {
         return sportsmanService.findAchievementsBySportsman(pk);
     }

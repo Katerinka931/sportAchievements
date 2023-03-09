@@ -22,22 +22,22 @@ public class TeamController {
         this.sportsmanService = sportsmanService;
     }
 
-    @GetMapping
+    @GetMapping("/main")
     public List<TeamPojo> findAllTeams() {
         return teamService.findAll();
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/main/{name}")
     public List<TeamPojo> findTeamByName(@PathVariable String name) {
         return teamService.findAllByName(name);
     }
 
-    @GetMapping("/{pk}/sportsmen")
+    @GetMapping("/main/{pk}/sportsmen")
     public List<SportsmanPojo> findSportsmenByTeam(@PathVariable long pk) {
         return teamService.findSportsmen(pk);
     }
 
-    @GetMapping("/count")
+    @GetMapping("/main/count")
     public List<TeamPojo> findByCountOfParticipants(@RequestParam int min, @RequestParam int max) {
         return teamService.findByCount(min, max);
     }

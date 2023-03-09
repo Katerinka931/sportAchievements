@@ -26,24 +26,24 @@ public class SportController {
         this.teamService = teamService;
     }
 
-    @GetMapping
+    @GetMapping("/main")
     @ResponseBody
     public List<SportPojo> findAllSports() {
         return sportService.findAll();
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/main/{name}")
     @ResponseBody
     public SportPojo findSportByName(@PathVariable String name) {
         return sportService.findSportByName(name);
     }
 
-    @GetMapping("/{pk}/sportsmen")
+    @GetMapping("/main/{pk}/sportsmen")
     public List<SportsmanPojo> findSportsmenBySport(@PathVariable long pk) {
         return sportService.findSportsmen(pk);
     }
 
-    @GetMapping("/{pk}/teams")
+    @GetMapping("/main/{pk}/teams")
     public List<TeamPojo> findTeamBySport(@PathVariable long pk) {
         return sportService.findTeams(pk);
     }
