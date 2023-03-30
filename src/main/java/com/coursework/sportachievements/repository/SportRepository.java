@@ -13,4 +13,6 @@ public interface SportRepository extends JpaRepository<Sport, Long> {
     Sport findById(long id);
 
     void deleteById(long id);
+
+
 }

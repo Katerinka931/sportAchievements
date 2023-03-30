@@ -1,9 +1,11 @@
 package com.coursework.sportachievements.controller;
 
+import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.dto.SportsmanPojo;
 import com.coursework.sportachievements.dto.TeamPojo;
 import com.coursework.sportachievements.service.SportsmanService;
 import com.coursework.sportachievements.service.TeamService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +15,19 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api/team")
+@RequiredArgsConstructor
 public class TeamController {
     private final TeamService teamService;
     private final SportsmanService sportsmanService;
 
-    public TeamController(TeamService teamService, SportsmanService sportsmanService) {
-        this.teamService = teamService;
-        this.sportsmanService = sportsmanService;
-    }
-
     @GetMapping("/main")
     public List<TeamPojo> findAllTeams() {
         return teamService.findAll();
+    }
+
+    @GetMapping("/{id}/sport")
+    public SportPojo findSportByTeam(@PathVariable long id) {
+        return teamService.findSportByTeam(id);
     }
 
     @GetMapping("/main/{name}")

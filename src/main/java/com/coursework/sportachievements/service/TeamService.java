@@ -1,5 +1,6 @@
 package com.coursework.sportachievements.service;
 
+import com.coursework.sportachievements.dto.SportPojo;
 import com.coursework.sportachievements.dto.SportsmanPojo;
 import com.coursework.sportachievements.dto.TeamPojo;
 import com.coursework.sportachievements.entity.Sport;
@@ -39,6 +40,12 @@ public class TeamService {
     public List<TeamPojo> findAllByName(String name) {
         List<Team> teams = teamRepository.findAllByName(name);
         return TeamPojo.convertTeamsToPojo(teams);
+    }
+
+    public SportPojo findSportByTeam(long id) {
+        Team team = teamRepository.findById(id);
+        Sport sport = sportRepository.findById(team.getTeamsSport().getId());
+        return SportPojo.fromEntity(sport);
     }
 
     public TeamPojo findById(long pk) {
