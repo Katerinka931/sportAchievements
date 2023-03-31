@@ -20,19 +20,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SportService {
-
-    private SportRepository sportRepository;
-
-    private SportsmanRepository sportsmanRepository;
-
-    private TeamRepository teamRepository;
-
-    @Autowired
-    public SportService(SportRepository sportRepository, SportsmanRepository sportsmanRepository, TeamRepository teamRepository) {
-        this.sportRepository = sportRepository;
-        this.sportsmanRepository = sportsmanRepository;
-        this.teamRepository = teamRepository;
-    }
+    private final SportRepository sportRepository;
+    private final SportsmanRepository sportsmanRepository;
+    private final TeamRepository teamRepository;
 
     public List<SportPojo> findAll() {
         List<Sport> sports = sportRepository.findBy();
@@ -97,11 +87,23 @@ public class SportService {
 
     public void updateTeam(long sportId, long teamId, TeamPojo pojo) {
         Team team = teamRepository.findById(teamId);
+        List<Sportsman> sportsmen = sportsmanRepository.findAllByTeam(team);
+        Sport s = sportRepository.findById(sportId);
         if (team != null) {
             team.setCount(pojo.getCount());
             team.setName(pojo.getName());
-            team.setTeamsSport(sportRepository.findById(sportId));
+            team.setTeamsSport(s);
             teamRepository.save(team);
+            updateAllSportsmenOfTeam(sportsmen, s);
+        }
+    }
+
+    private void updateAllSportsmenOfTeam(List<Sportsman> sportsmen, Sport sport) {
+        if (sportsmen != null) {
+            for (Sportsman s : sportsmen) {
+                s.setSport(sport);
+                sportsmanRepository.save(s);
+            }
         }
     }
 
@@ -115,16 +117,19 @@ public class SportService {
 
             if (team != null) {
                 Sport teamsSport = sportRepository.findById(team.getTeamsSport().getId());
-                if (teamsSport.getId() == sport.getId()) {
+                if (sportsman.getSport().getId() != sportId) {
+                    sportsman.setTeam(null);
                     sportsman.setSport(sport);
                 } else {
-                    sportsman.setSport(team.getTeamsSport());
+                    if (teamsSport.getId() == sport.getId()) {
+                        sportsman.setSport(sport);
+                    } else {
+                        sportsman.setSport(team.getTeamsSport());
+                    }
                 }
             } else {
                 sportsman.setSport(sport);
             }
-
-
             sportsmanRepository.save(sportsman);
         }
     }

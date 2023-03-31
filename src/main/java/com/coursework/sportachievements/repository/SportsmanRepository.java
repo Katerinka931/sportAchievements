@@ -10,10 +10,6 @@ import java.util.List;
 public interface SportsmanRepository extends JpaRepository<Sportsman, Long> {
     Sportsman findById(long id);
 
-    List<Sportsman> findAllByLastName(String lastName);
-
-    List<Sportsman> findAllByFirstName(String firstName);
-
     List<Sportsman> findAllBySport(Sport sport);
 
     List<Sportsman> findAllByTeam(Team team);

@@ -1,14 +1,8 @@
 package com.coursework.sportachievements.service;
 
-import com.coursework.sportachievements.dto.AchievementPojo;
-import com.coursework.sportachievements.dto.ContactPojo;
-import com.coursework.sportachievements.dto.SportsmanPojo;
-import com.coursework.sportachievements.entity.Achievement;
-import com.coursework.sportachievements.entity.Contact;
-import com.coursework.sportachievements.entity.Sportsman;
-import com.coursework.sportachievements.repository.AchievementRepository;
-import com.coursework.sportachievements.repository.ContactRepository;
-import com.coursework.sportachievements.repository.SportsmanRepository;
+import com.coursework.sportachievements.dto.*;
+import com.coursework.sportachievements.entity.*;
+import com.coursework.sportachievements.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,16 +14,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SportsmanService {
-    private SportsmanRepository sportsmanRepository;
-    private AchievementRepository achievementRepository;
-    private ContactRepository contactRepository;
-
-    @Autowired
-    public SportsmanService(SportsmanRepository sportsmanRepository, AchievementRepository achievementRepository, ContactRepository contactRepository) {
-        this.sportsmanRepository = sportsmanRepository;
-        this.achievementRepository = achievementRepository;
-        this.contactRepository = contactRepository;
-    }
+    private final SportsmanRepository sportsmanRepository;
+    private final AchievementRepository achievementRepository;
+    private final ContactRepository contactRepository;
+    private final SportRepository sportRepository;
+    private final TeamRepository teamRepository;
 
     public List<SportsmanPojo> findAll() {
         List<Sportsman> sportsmen = sportsmanRepository.findAll();
@@ -110,5 +99,22 @@ public class SportsmanService {
 
     public SportsmanPojo findById(long id) {
         return SportsmanPojo.fromEntity(sportsmanRepository.findById(id));
+    }
+
+    public SportPojo findSportBySportsman(long id) {
+        Sportsman sportsman = sportsmanRepository.findById(id);
+        Sport sport = sportRepository.findById(sportsman.getSport().getId());
+        return SportPojo.fromEntity(sport);
+    }
+
+    public TeamPojo findTeamBySportsman(long id) {
+        Sportsman sportsman = sportsmanRepository.findById(id);
+        Team sportsmanTeam = sportsman.getTeam();
+        if (sportsmanTeam != null) {
+            long team_id = sportsmanTeam.getId();
+            Team team = teamRepository.findById(team_id);
+            return TeamPojo.fromEntity(team);
+        }
+        return null;
     }
 }

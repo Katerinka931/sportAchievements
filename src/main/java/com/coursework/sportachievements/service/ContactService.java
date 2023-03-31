@@ -15,12 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ContactService {
-    private ContactRepository contactRepository;
-
-    @Autowired
-    public ContactService(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
+    private final ContactRepository contactRepository;
 
     public List<ContactPojo> findAll() {
         List<Contact> contacts = contactRepository.findAll();

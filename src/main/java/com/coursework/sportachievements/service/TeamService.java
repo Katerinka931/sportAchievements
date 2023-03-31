@@ -20,17 +20,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-    private TeamRepository teamRepository;
-    private SportsmanRepository sportsmanRepository;
-
-    private SportRepository sportRepository;
-
-    @Autowired
-    public TeamService(TeamRepository teamRepository, SportsmanRepository sportsmanRepository, SportRepository sportRepository) {
-        this.teamRepository = teamRepository;
-        this.sportsmanRepository = sportsmanRepository;
-        this.sportRepository = sportRepository;
-    }
+    private final TeamRepository teamRepository;
+    private final SportsmanRepository sportsmanRepository;
+    private final SportRepository sportRepository;
 
     public List<TeamPojo> findAll() {
         List<Team> teams = teamRepository.findAll();

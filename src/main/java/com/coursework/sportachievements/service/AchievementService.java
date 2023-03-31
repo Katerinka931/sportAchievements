@@ -17,13 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
-
-    private AchievementRepository achievementRepository;
-
-    @Autowired
-    public AchievementService(AchievementRepository achievementRepository) {
-        this.achievementRepository = achievementRepository;
-    }
+    private final AchievementRepository achievementRepository;
 
     public List<AchievementPojo> findAll() {
         List<Achievement> achievements = achievementRepository.findAll();

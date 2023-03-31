@@ -25,11 +25,6 @@ public class TeamController {
         return teamService.findAll();
     }
 
-    @GetMapping("/{id}/sport")
-    public SportPojo findSportByTeam(@PathVariable long id) {
-        return teamService.findSportByTeam(id);
-    }
-
     @GetMapping("/main/{name}")
     public List<TeamPojo> findTeamByName(@PathVariable String name) {
         return teamService.findAllByName(name);
@@ -43,6 +38,11 @@ public class TeamController {
     @GetMapping("/main/count")
     public List<TeamPojo> findByCountOfParticipants(@RequestParam int min, @RequestParam int max) {
         return teamService.findByCount(min, max);
+    }
+
+    @GetMapping("/{id}/sport")
+    public SportPojo findSportByTeam(@PathVariable long id) {
+        return teamService.findSportByTeam(id);
     }
 
     @DeleteMapping("/{id}")
