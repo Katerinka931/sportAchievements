@@ -21,63 +21,109 @@ public class TeamController {
     private final SportsmanService sportsmanService;
 
     @GetMapping("/main")
-    public List<TeamPojo> findAllTeams() {
-        return teamService.findAll();
+    public ResponseEntity<List<TeamPojo>> findAllTeams() {
+        try {
+            List<TeamPojo> teamPojos = teamService.findAll();
+            return new ResponseEntity<>(teamPojos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/main/{name}")
-    public List<TeamPojo> findTeamByName(@PathVariable String name) {
-        return teamService.findAllByName(name);
+    public ResponseEntity<List<TeamPojo>> findTeamByName(@PathVariable String name) {
+        try {
+            List<TeamPojo> pojoList = teamService.findAllByName(name);
+            return new ResponseEntity<>(pojoList, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/main/{pk}/sportsmen")
-    public List<SportsmanPojo> findSportsmenByTeam(@PathVariable long pk) {
-        return teamService.findSportsmen(pk);
+    public ResponseEntity<List<SportsmanPojo>> findSportsmenByTeam(@PathVariable long pk) {
+        try {
+            List<SportsmanPojo> sportsmanPojos = teamService.findSportsmen(pk);
+            return new ResponseEntity<>(sportsmanPojos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/main/count")
-    public List<TeamPojo> findByCountOfParticipants(@RequestParam int min, @RequestParam int max) {
-        return teamService.findByCount(min, max);
+    public ResponseEntity<List<TeamPojo>> findByCountOfParticipants(@RequestParam int min, @RequestParam int max) {
+        try {
+            List<TeamPojo> teamPojos = teamService.findByCount(min, max);
+            return new ResponseEntity<>(teamPojos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}/sport")
-    public SportPojo findSportByTeam(@PathVariable long id) {
-        return teamService.findSportByTeam(id);
+    public ResponseEntity<SportPojo> findSportByTeam(@PathVariable long id) {
+        try {
+            SportPojo sportPojo = teamService.findSportByTeam(id);
+            return new ResponseEntity<>(sportPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTeam(@PathVariable long id) {
-        return teamService.deleteTeam(id);
+        if (teamService.findById(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return teamService.deleteTeam(id);
+        }
     }
 
     @DeleteMapping("/sportsmen/{id}")
-    public boolean deleteSportsman(@PathVariable long id) {
+    public ResponseEntity<HttpStatus> deleteSportsman(@PathVariable long id) {
         if (sportsmanService.findById(id) == null) {
-            return false;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        sportsmanService.deleteSportsman(id);
-        return true;
+        return sportsmanService.deleteSportsman(id);
     }
 
     @PostMapping
-    @ResponseBody
-    public TeamPojo createTeam(@RequestBody TeamPojo teamPojo) {
-        return teamService.createTeam(teamPojo);
+    public ResponseEntity<TeamPojo> createTeam(@RequestBody TeamPojo teamPojo) {
+        try {
+            TeamPojo pojo = teamService.createTeam(teamPojo);
+            return new ResponseEntity<>(pojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("{teamId}/sportsman")
-    public SportsmanPojo createSportsman(@PathVariable long teamId, @RequestBody SportsmanPojo pojo) {
-        return teamService.createSportsman(teamId, pojo);
+    public ResponseEntity<SportsmanPojo> createSportsman(@PathVariable long teamId, @RequestBody SportsmanPojo pojo) {
+        try {
+            SportsmanPojo sportsmanPojo = teamService.createSportsman(teamId, pojo);
+            return new ResponseEntity<>(sportsmanPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
-    public void updateTeam(@PathVariable long id, @RequestBody TeamPojo pojo) {
-        teamService.updateTeam(id, pojo);
+    public ResponseEntity<TeamPojo> updateTeam(@PathVariable long id, @RequestBody TeamPojo pojo) {
+        try {
+            TeamPojo teamPojo = teamService.updateTeam(id, pojo);
+            return new ResponseEntity<>(teamPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{teamId}/sportsman/{sportsmanId}")
-    public void updateSportsman(@PathVariable long teamId, @PathVariable long sportsmanId, @RequestBody SportsmanPojo pojo) {
-        teamService.updateSportsman(teamId, sportsmanId, pojo);
+    public ResponseEntity<SportsmanPojo> updateSportsman(@PathVariable long teamId, @PathVariable long sportsmanId, @RequestBody SportsmanPojo pojo) {
+        try {
+            SportsmanPojo sportsmanPojo = teamService.updateSportsman(teamId, sportsmanId, pojo);
+            return new ResponseEntity<>(sportsmanPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

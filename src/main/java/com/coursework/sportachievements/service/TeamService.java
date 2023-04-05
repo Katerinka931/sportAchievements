@@ -10,7 +10,6 @@ import com.coursework.sportachievements.repository.SportRepository;
 import com.coursework.sportachievements.repository.SportsmanRepository;
 import com.coursework.sportachievements.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -83,16 +82,18 @@ public class TeamService {
         return SportsmanPojo.fromEntity(sportsman);
     }
 
-    public void updateTeam(long id, TeamPojo pojo) {
+    public TeamPojo updateTeam(long id, TeamPojo pojo) {
         Team team = teamRepository.findById(id);
         if (team != null) {
             team.setName(pojo.getName());
             team.setCount(pojo.getCount());
             teamRepository.save(team);
+            return TeamPojo.fromEntity(team);
         }
+        return pojo;
     }
 
-    public void updateSportsman(long teamId, long sportsmanId, SportsmanPojo pojo) {
+    public SportsmanPojo updateSportsman(long teamId, long sportsmanId, SportsmanPojo pojo) {
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
         if (sportsman != null) {
             SportsmanPojo.setSportsmanData(sportsman, pojo);
@@ -106,6 +107,8 @@ public class TeamService {
                 sportsman.setSport(null);
             }
             sportsmanRepository.save(sportsman);
+            return SportsmanPojo.fromEntity(sportsman);
         }
+        return pojo;
     }
 }

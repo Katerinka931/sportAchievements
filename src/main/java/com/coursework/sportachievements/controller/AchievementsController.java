@@ -56,11 +56,4 @@ public class AchievementsController {
     public void updateAchievement(@PathVariable long id, @RequestBody AchievementPojo pojo) {
         achievementService.updateAchievement(id, pojo);
     }
-
-    //-------------
-    // todo
-    //  1. можно отправлять статус ошибки, а можно отправить с кодом 200 и сообщение.
-    //  выводить сообщения об ошибках и успехах пользователю
-    //  2. - проверка что телефон только числа (и добавить шаблон в ангуляр);
-    //     -? валидация формы на фронте
 }

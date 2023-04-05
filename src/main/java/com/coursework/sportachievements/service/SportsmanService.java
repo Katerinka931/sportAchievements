@@ -4,7 +4,6 @@ import com.coursework.sportachievements.dto.*;
 import com.coursework.sportachievements.entity.*;
 import com.coursework.sportachievements.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -69,32 +68,38 @@ public class SportsmanService {
         return AchievementPojo.fromEntity(achievement);
     }
 
-    public void updateSportsman(long pk, SportsmanPojo pojo) {
+    public SportsmanPojo updateSportsman(long pk, SportsmanPojo pojo) {
         Sportsman sportsman = sportsmanRepository.findById(pk);
         if (sportsman != null) {
             SportsmanPojo.setSportsmanData(sportsman, pojo);
             sportsmanRepository.save(sportsman);
+            return SportsmanPojo.fromEntity(sportsman);
         }
+        return pojo;
     }
 
-    public void updateContact(long contactId, long sportsmanId, ContactPojo pojo) {
+    public ContactPojo updateContact(long contactId, long sportsmanId, ContactPojo pojo) {
         Contact contact = contactRepository.findById(contactId);
         if (contact != null) {
             contact.setEmail(pojo.getEmail());
             contact.setPhone(pojo.getPhone());
             contact.setSportsman(sportsmanRepository.findById(sportsmanId));
             contactRepository.save(contact);
+            return ContactPojo.fromEntity(contact);
         }
+        return pojo;
     }
 
-    public void updateAchievement(long achievementId, long sportsmanId, AchievementPojo pojo) {
+    public AchievementPojo updateAchievement(long achievementId, long sportsmanId, AchievementPojo pojo) {
         Achievement achievement = achievementRepository.findById(achievementId);
         if (achievement != null) {
             achievement.setName(pojo.getName());
             achievement.setRecvDate(pojo.getRecvDate());
             achievement.setAchSportsman(sportsmanRepository.findById(sportsmanId));
             achievementRepository.save(achievement);
+            return AchievementPojo.fromEntity(achievement);
         }
+        return pojo;
     }
 
     public SportsmanPojo findById(long id) {

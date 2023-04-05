@@ -10,7 +10,6 @@ import com.coursework.sportachievements.repository.SportRepository;
 import com.coursework.sportachievements.repository.SportsmanRepository;
 import com.coursework.sportachievements.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -77,15 +76,17 @@ public class SportService {
         return SportsmanPojo.fromEntity(sportsman);
     }
 
-    public void updateSport(long id, SportPojo pojo) {
+    public SportPojo updateSport(long id, SportPojo pojo) {
         Sport sport = sportRepository.findById(id);
         if (sport != null) {
             sport.setName(pojo.getName());
             sportRepository.save(sport);
+            return SportPojo.fromEntity(sport);
         }
+        return pojo;
     }
 
-    public void updateTeam(long sportId, long teamId, TeamPojo pojo) {
+    public TeamPojo updateTeam(long sportId, long teamId, TeamPojo pojo) {
         Team team = teamRepository.findById(teamId);
         List<Sportsman> sportsmen = sportsmanRepository.findAllByTeam(team);
         Sport s = sportRepository.findById(sportId);
@@ -95,7 +96,9 @@ public class SportService {
             team.setTeamsSport(s);
             teamRepository.save(team);
             updateAllSportsmenOfTeam(sportsmen, s);
+            return TeamPojo.fromEntity(team);
         }
+        return pojo;
     }
 
     private void updateAllSportsmenOfTeam(List<Sportsman> sportsmen, Sport sport) {
@@ -107,7 +110,7 @@ public class SportService {
         }
     }
 
-    public void updateSportsman(long sportId, long sportsmanId, SportsmanPojo pojo) {
+    public SportsmanPojo updateSportsman(long sportId, long sportsmanId, SportsmanPojo pojo) {
         Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
         if (sportsman != null) {
             SportsmanPojo.setSportsmanData(sportsman, pojo);
@@ -131,7 +134,14 @@ public class SportService {
                 sportsman.setSport(sport);
             }
             sportsmanRepository.save(sportsman);
+            return SportsmanPojo.fromEntity(sportsman);
         }
+        return pojo;
     }
+
+    public SportPojo findById(long id) {
+        return SportPojo.fromEntity(sportRepository.findById(id));
+    }
+
 }
 

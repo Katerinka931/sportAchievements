@@ -25,82 +25,136 @@ public class SportsmanController {
     }
 
     @GetMapping("/main")
-    public List<SportsmanPojo> findAllSportsmen() {
-        return sportsmanService.findAll();
+    public ResponseEntity<List<SportsmanPojo>> findAllSportsmen() {
+        try {
+            List<SportsmanPojo> sportsmanPojos = sportsmanService.findAll();
+            return new ResponseEntity<>(sportsmanPojos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/main/{pk}/contacts")
-    public List<ContactPojo> findContactsBySportsman(@PathVariable long pk) {
-        return sportsmanService.findContactsBySportsman(pk);
+    public ResponseEntity<List<ContactPojo>> findContactsBySportsman(@PathVariable long pk) {
+        try {
+            List<ContactPojo> sportsmanPojos = sportsmanService.findContactsBySportsman(pk);
+            return new ResponseEntity<>(sportsmanPojos, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/main/{pk}/achievements")
-    public List<AchievementPojo> findAchievementsBySportsman(@PathVariable long pk) {
-        return sportsmanService.findAchievementsBySportsman(pk);
+    public ResponseEntity<List<AchievementPojo>> findAchievementsBySportsman(@PathVariable long pk) {
+        try {
+            List<AchievementPojo> achievements = sportsmanService.findAchievementsBySportsman(pk);
+            return new ResponseEntity<>(achievements, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}/sport")
-    public SportPojo findSportBySportsman(@PathVariable long id) {
-        return sportsmanService.findSportBySportsman(id);
+    public ResponseEntity<SportPojo> findSportBySportsman(@PathVariable long id) {
+        try {
+            SportPojo sportPojo = sportsmanService.findSportBySportsman(id);
+            return new ResponseEntity<>(sportPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}/team")
-    public TeamPojo findTeamBySportsman(@PathVariable long id) {
-        return sportsmanService.findTeamBySportsman(id);
+    public ResponseEntity<TeamPojo> findTeamBySportsman(@PathVariable long id) {
+        try {
+            TeamPojo teamPojo = sportsmanService.findTeamBySportsman(id);
+            return new ResponseEntity<>(teamPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteSportsman(@PathVariable long id) {
+        if (sportsmanService.findById(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return sportsmanService.deleteSportsman(id);
     }
 
     @DeleteMapping("/contact/{id}")
-    public boolean deleteContact(@PathVariable long id) {
+    public ResponseEntity<HttpStatus> deleteContact(@PathVariable long id) {
         if (contactService.findById(id) == null) {
-            return false;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        contactService.deleteContact(id);
-        return true;
+        return contactService.deleteContact(id);
     }
 
     @DeleteMapping("/achievement/{id}")
-    public boolean deleteAchievement(@PathVariable long id) {
+    public ResponseEntity<HttpStatus> deleteAchievement(@PathVariable long id) {
         if (achievementService.findById(id) == null) {
-            return false;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        achievementService.deleteAchievement(id);
-        return true;
+        return achievementService.deleteAchievement(id);
     }
 
     @PostMapping
-    public SportsmanPojo createSportsman(@RequestBody SportsmanPojo sportsmanPojo) {
-        return sportsmanService.createSportsman(sportsmanPojo);
+    public ResponseEntity<SportsmanPojo> createSportsman(@RequestBody SportsmanPojo sportsmanPojo) {
+        try {
+            SportsmanPojo teamPojo = sportsmanService.createSportsman(sportsmanPojo);
+            return new ResponseEntity<>(teamPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/{sportsmanId}/contacts")
-    public ContactPojo createContact(@RequestBody ContactPojo pojo, @PathVariable long sportsmanId) {
-        return sportsmanService.createContact(sportsmanId, pojo);
+    public ResponseEntity<ContactPojo> createContact(@RequestBody ContactPojo pojo, @PathVariable long sportsmanId) {
+        try {
+            ContactPojo contactPojo = sportsmanService.createContact(sportsmanId, pojo);
+            return new ResponseEntity<>(contactPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/{sportsmanId}/achievements")
-    public AchievementPojo createAchievement(@RequestBody AchievementPojo pojo, @PathVariable long sportsmanId) {
-        return sportsmanService.createAchievement(sportsmanId, pojo);
+    public ResponseEntity<AchievementPojo> createAchievement(@RequestBody AchievementPojo pojo, @PathVariable long sportsmanId) {
+        try {
+            AchievementPojo achievementPojo = sportsmanService.createAchievement(sportsmanId, pojo);
+            return new ResponseEntity<>(achievementPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{id}")
-    public void updateSportsman(@PathVariable long id, @RequestBody SportsmanPojo pojo) {
-        sportsmanService.updateSportsman(id, pojo);
+    public ResponseEntity<SportsmanPojo> updateSportsman(@PathVariable long id, @RequestBody SportsmanPojo pojo) {
+        try {
+            SportsmanPojo sportsmanPojo = sportsmanService.updateSportsman(id, pojo);
+            return new ResponseEntity<>(sportsmanPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{sportsmanId}/contacts/{contactId}")
-    public void updateContact(@PathVariable long contactId, @PathVariable long sportsmanId, @RequestBody ContactPojo pojo) {
-        sportsmanService.updateContact(contactId, sportsmanId, pojo);
+    public ResponseEntity<ContactPojo> updateContact(@PathVariable long contactId, @PathVariable long sportsmanId, @RequestBody ContactPojo pojo) {
+        try {
+            ContactPojo contactPojo = sportsmanService.updateContact(contactId, sportsmanId, pojo);
+            return new ResponseEntity<>(contactPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{sportsmanId}/achievements/{achievementId}")
-    public void updateAchievement(@PathVariable long achievementId, @PathVariable long sportsmanId, @RequestBody AchievementPojo pojo) {
-        sportsmanService.updateAchievement(achievementId, sportsmanId, pojo);
+    public ResponseEntity<AchievementPojo> updateAchievement(@PathVariable long achievementId, @PathVariable long sportsmanId, @RequestBody AchievementPojo pojo) {
+        try {
+            AchievementPojo achievementPojo = sportsmanService.updateAchievement(achievementId, sportsmanId, pojo);
+            return new ResponseEntity<>(achievementPojo, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
