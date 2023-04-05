@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/achievements")
 public class AchievementsController {
@@ -59,7 +59,7 @@ public class AchievementsController {
 
     //-------------
     // todo
-    //  1. можно отправлять статус ошибки, а можно отправить с кодом 200 и сообщение. Но обязательно сделать сообщения пользователю
+    //  1. можно отправлять статус ошибки, а можно отправить с кодом 200 и сообщение.
     //  выводить сообщения об ошибках и успехах пользователю
     //  2. - проверка что телефон только числа (и добавить шаблон в ангуляр);
     //     -? валидация формы на фронте
