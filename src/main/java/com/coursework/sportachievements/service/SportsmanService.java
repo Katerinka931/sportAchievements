@@ -4,6 +4,7 @@ import com.coursework.sportachievements.dto.*;
 import com.coursework.sportachievements.entity.*;
 import com.coursework.sportachievements.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,9 @@ public class SportsmanService {
     }
 
     public ContactPojo createContact(long sportsmanId, ContactPojo pojo) {
+        if (!NumberUtils.isCreatable(pojo.getPhone()))
+            throw new NumberFormatException();
+
         Contact contact = ContactPojo.toEntity(pojo);
         contact.setSportsman(sportsmanRepository.findById(sportsmanId));
         contactRepository.save(contact);
@@ -79,6 +83,9 @@ public class SportsmanService {
     }
 
     public ContactPojo updateContact(long contactId, long sportsmanId, ContactPojo pojo) {
+        if (!NumberUtils.isCreatable(pojo.getPhone()))
+            throw new NumberFormatException();
+        
         Contact contact = contactRepository.findById(contactId);
         if (contact != null) {
             contact.setEmail(pojo.getEmail());

@@ -113,6 +113,8 @@ public class SportsmanController {
         try {
             ContactPojo contactPojo = sportsmanService.createContact(sportsmanId, pojo);
             return new ResponseEntity<>(contactPojo, HttpStatus.OK);
+        } catch (NumberFormatException e ) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -143,6 +145,8 @@ public class SportsmanController {
         try {
             ContactPojo contactPojo = sportsmanService.updateContact(contactId, sportsmanId, pojo);
             return new ResponseEntity<>(contactPojo, HttpStatus.OK);
+        } catch (NumberFormatException e ) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
