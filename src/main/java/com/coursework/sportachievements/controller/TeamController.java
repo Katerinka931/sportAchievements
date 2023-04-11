@@ -93,7 +93,7 @@ public class TeamController {
             TeamPojo pojo = teamService.createTeam(teamPojo);
             return new ResponseEntity<>(pojo, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
@@ -113,7 +113,7 @@ public class TeamController {
             TeamPojo teamPojo = teamService.updateTeam(id, pojo);
             return new ResponseEntity<>(teamPojo, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 

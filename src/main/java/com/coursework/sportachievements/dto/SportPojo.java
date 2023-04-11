@@ -27,14 +27,14 @@ public class SportPojo {
             List<SportsmanPojo> sportsmen = new ArrayList<>();
             pojo.setSportsmen(sportsmen);
             for (Sportsman sportsman : sport.getSportsmen()) {
-                sportsmen.add(SportsmanPojo.fromEntity(sportsman));
+                sportsmen.add(SportsmanPojo.fromEntity(sportsman, sport.getId()));
             }
         }
         if (sport.getTeams() != null) {
             List<TeamPojo> teams = new ArrayList<>();
             pojo.setTeams(teams);
             for (Team team : sport.getTeams()) {
-                teams.add(TeamPojo.fromEntity(team));
+                teams.add(TeamPojo.fromEntity(team, sport.getId()));
             }
         }
         return pojo;
@@ -57,8 +57,8 @@ public class SportPojo {
         if (pojo.getTeams() != null) {
             List<Team> teams = new ArrayList<>();
             sport.setTeams(teams);
-            for (TeamPojo teamPojoo : pojo.getTeams()) {
-                Team team = TeamPojo.toEntity(teamPojoo);
+            for (TeamPojo teamPojo : pojo.getTeams()) {
+                Team team = TeamPojo.toEntity(teamPojo);
                 team.setTeamsSport(sport);
                 teams.add(team);
             }

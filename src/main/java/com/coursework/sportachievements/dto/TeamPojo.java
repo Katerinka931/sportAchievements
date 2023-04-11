@@ -15,20 +15,18 @@ public class TeamPojo {
     private String name;
     private int count;
     private List<SportsmanPojo> sportsmen;
+    private long sport_id;
 
     public static TeamPojo fromEntity(Team team) {
         TeamPojo pojo = new TeamPojo();
-        pojo.setId(team.getId());
-        pojo.setName(team.getName());
-        pojo.setCount(team.getCount());
+        setDataToPojo(pojo, team);
+        return pojo;
+    }
 
-        if (team.getSportsmen() != null) {
-            List<SportsmanPojo> sportsmen = new ArrayList<>();
-            pojo.setSportsmen(sportsmen);
-            for (Sportsman sportsman : team.getSportsmen()) {
-                sportsmen.add(SportsmanPojo.fromEntity(sportsman));
-            }
-        }
+    public static TeamPojo fromEntity(Team team, long sport_id) {
+        TeamPojo pojo = new TeamPojo();
+        pojo.setSport_id(sport_id);
+        setDataToPojo(pojo, team);
         return pojo;
     }
 
@@ -56,5 +54,19 @@ public class TeamPojo {
             pojos.add(TeamPojo.fromEntity(team));
         }
         return pojos;
+    }
+
+    private static void setDataToPojo(TeamPojo pojo, Team team) {
+        pojo.setId(team.getId());
+        pojo.setName(team.getName());
+        pojo.setCount(team.getCount());
+
+        if (team.getSportsmen() != null) {
+            List<SportsmanPojo> sportsmen = new ArrayList<>();
+            pojo.setSportsmen(sportsmen);
+            for (Sportsman sportsman : team.getSportsmen()) {
+                sportsmen.add(SportsmanPojo.fromEntity(sportsman, team.getTeamsSport().getId(), team.getId()));
+            }
+        }
     }
 }
