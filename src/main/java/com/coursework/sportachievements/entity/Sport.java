@@ -15,7 +15,7 @@ public class Sport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", columnDefinition = "text", length = 150, nullable = false, unique = true)
+    @Column(name = "name", length = 150, nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "sport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -15,7 +15,7 @@ public class Sportsman {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "passport", columnDefinition = "text", length = 50, nullable = false, unique = true)
+    @Column(name = "passport", length = 50, nullable = false, unique = true)
     private String passport;
     private String firstName;
     private String lastName;
