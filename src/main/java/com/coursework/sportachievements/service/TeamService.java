@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,19 +35,27 @@ public class TeamService {
     }
 
     public SportPojo findSportByTeam(long id) {
-        Team team = teamRepository.findById(id);
-        Sport sport = sportRepository.findById(team.getTeamsSport().getId());
-        return SportPojo.fromEntity(sport);
+        Optional<Team> team_opt = teamRepository.findById(id);
+        if (team_opt.isPresent()) {
+            Optional<Sport> sport_opt = sportRepository.findById(team_opt.get().getTeamsSport().getId());
+            return sport_opt.map(SportPojo::fromEntity).orElse(null);
+        }
+        return null;
     }
 
     public TeamPojo findById(long pk) {
-        return TeamPojo.fromEntity(teamRepository.findById(pk));
+        Optional<Team> team_opt = teamRepository.findById(pk);
+        return team_opt.map(TeamPojo::fromEntity).orElse(null);
     }
 
     public List<SportsmanPojo> findSportsmen(long pk) {
-        Team team = teamRepository.findById(pk);
-        List<Sportsman> sportsmen = sportsmanRepository.findAllByTeam(team);
-        return SportsmanPojo.convertSportsmenToPojo(sportsmen);
+        Optional<Team> team_opt = teamRepository.findById(pk);
+        if (team_opt.isPresent()) {
+            Team team = team_opt.get();
+            List<Sportsman> sportsmen = sportsmanRepository.findAllByTeam(team);
+            return SportsmanPojo.convertSportsmenToPojo(sportsmen);
+        }
+        return null;
     }
 
     public List<TeamPojo> findByCount(int min, int max) {
@@ -56,7 +65,7 @@ public class TeamService {
 
     public ResponseEntity<HttpStatus> deleteTeam(long id) {
         try {
-            if (teamRepository.findById(id) != null) {
+            if (teamRepository.findById(id).isPresent()) {
                 teamRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
@@ -74,17 +83,26 @@ public class TeamService {
 
     public SportsmanPojo createSportsman(long teamId, SportsmanPojo pojo) {
         Sportsman sportsman = SportsmanPojo.toEntity(pojo);
-        Team team = teamRepository.findById(teamId);
-        Sport sport = sportRepository.findById(team.getTeamsSport().getId());
-        sportsman.setTeam(team);
-        sportsman.setSport(sport);
-        sportsmanRepository.save(sportsman);
-        return SportsmanPojo.fromEntity(sportsman);
+        Optional<Team> team_opt = teamRepository.findById(teamId);
+        if (team_opt.isPresent()) {
+            Team team = team_opt.get();
+            Optional<Sport> sport_opt = sportRepository.findById(team.getTeamsSport().getId());
+            if (sport_opt.isPresent()) {
+                Sport sport = sport_opt.get();
+                sportsman.setTeam(team);
+                sportsman.setSport(sport);
+                sportsmanRepository.save(sportsman);
+                return SportsmanPojo.fromEntity(sportsman);
+            }
+            return null;
+        }
+        return null;
     }
 
     public TeamPojo updateTeam(long id, TeamPojo pojo) {
-        Team team = teamRepository.findById(id);
-        if (team != null) {
+        Optional<Team> team_opt = teamRepository.findById(id);
+        if (team_opt.isPresent()) {
+            Team team = team_opt.get();
             team.setName(pojo.getName());
             team.setCount(pojo.getCount());
             teamRepository.save(team);
@@ -94,20 +112,25 @@ public class TeamService {
     }
 
     public SportsmanPojo updateSportsman(long teamId, long sportsmanId, SportsmanPojo pojo) {
-        Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
-        if (sportsman != null) {
+        Optional<Sportsman> opt = sportsmanRepository.findById(sportsmanId);
+        if (opt.isPresent()) {
+            Sportsman sportsman = opt.get();
             SportsmanPojo.setSportsmanData(sportsman, pojo);
-            Team team = teamRepository.findById(teamId);
-            sportsman.setTeam(team);
+            Optional<Team> teamOptional = teamRepository.findById(teamId);
+            if (teamOptional.isPresent()) {
+                Team team = teamOptional.get();
+                sportsman.setTeam(team);
 
-            Sport sport = team.getTeamsSport();
-            if (sport != null) {
-                sportsman.setSport(sportRepository.findById(sport.getId()));
-            } else {
-                sportsman.setSport(null);
+                Sport sport = team.getTeamsSport();
+                if (sport != null) {
+                    Optional<Sport> sportOptional = sportRepository.findById(sport.getId());
+                    sportOptional.ifPresent(sportsman::setSport);
+                } else {
+                    sportsman.setSport(null);
+                }
+                sportsmanRepository.save(sportsman);
+                return SportsmanPojo.fromEntity(sportsman);
             }
-            sportsmanRepository.save(sportsman);
-            return SportsmanPojo.fromEntity(sportsman);
         }
         return pojo;
     }

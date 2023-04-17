@@ -2,10 +2,8 @@ package com.coursework.sportachievements.service;
 
 import com.coursework.sportachievements.dto.AchievementPojo;
 import com.coursework.sportachievements.entity.Achievement;
-import com.coursework.sportachievements.entity.Sportsman;
 import com.coursework.sportachievements.repository.AchievementRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +28,8 @@ public class AchievementService {
     }
 
     public AchievementPojo findById(long pk) {
-        return AchievementPojo.fromEntity(achievementRepository.findById(pk));
+        Optional<Achievement> achievementOptional = achievementRepository.findById(pk);
+        return achievementOptional.map(AchievementPojo::fromEntity).orElse(null);
     }
 
     public List<AchievementPojo> findByReceiveDate(Date date) {
@@ -39,7 +38,7 @@ public class AchievementService {
 
     public ResponseEntity<HttpStatus> deleteAchievement(long id) {
         try {
-            if (achievementRepository.findById(id) != null) {
+            if (achievementRepository.findById(id).isPresent()) {
                 achievementRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
@@ -56,8 +55,9 @@ public class AchievementService {
     }
 
     public void updateAchievement(long id, AchievementPojo pojo) {
-        Achievement achievement = achievementRepository.findById(id);
-        if (achievement != null) {
+        Optional<Achievement> achievementOptional = achievementRepository.findById(id);
+        if (achievementOptional.isPresent()) {
+            Achievement achievement = achievementOptional.get();
             achievement.setName(pojo.getName());
             achievement.setRecvDate(pojo.getRecvDate());
             achievementRepository.save(achievement);

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,20 +27,28 @@ public class SportsmanService {
     }
 
     public List<AchievementPojo> findAchievementsBySportsman(long sportsmanId) {
-        Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
-        List<Achievement> achievements = achievementRepository.findAllByAchSportsman(sportsman);
-        return AchievementPojo.convertAchievementsToPojo(achievements);
+        Optional<Sportsman> opt = sportsmanRepository.findById(sportsmanId);
+        if (opt.isPresent()) {
+            Sportsman sportsman = opt.get();
+            List<Achievement> achievements = achievementRepository.findAllByAchSportsman(sportsman);
+            return AchievementPojo.convertAchievementsToPojo(achievements);
+        }
+        return null;
     }
 
     public List<ContactPojo> findContactsBySportsman(long sportsmanId) {
-        Sportsman sportsman = sportsmanRepository.findById(sportsmanId);
-        List<Contact> contacts = contactRepository.findAllBySportsman(sportsman);
-        return ContactPojo.convertContactsToPojo(contacts);
+        Optional<Sportsman> opt = sportsmanRepository.findById(sportsmanId);
+        if (opt.isPresent()) {
+            Sportsman sportsman = opt.get();
+            List<Contact> contacts = contactRepository.findAllBySportsman(sportsman);
+            return ContactPojo.convertContactsToPojo(contacts);
+        }
+        return null;
     }
 
     public ResponseEntity<HttpStatus> deleteSportsman(long id) {
         try {
-            if (sportsmanRepository.findById(id) != null) {
+            if (sportsmanRepository.findById(id).isPresent()) {
                 sportsmanRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
@@ -59,22 +68,31 @@ public class SportsmanService {
         if (!NumberUtils.isCreatable(pojo.getPhone()))
             throw new NumberFormatException();
 
-        Contact contact = ContactPojo.toEntity(pojo);
-        contact.setSportsman(sportsmanRepository.findById(sportsmanId));
-        contactRepository.save(contact);
-        return ContactPojo.fromEntity(contact);
+        Optional<Sportsman> opt = sportsmanRepository.findById(sportsmanId);
+        if (opt.isPresent()) {
+            Contact contact = ContactPojo.toEntity(pojo);
+            contact.setSportsman(opt.get());
+            contactRepository.save(contact);
+            return ContactPojo.fromEntity(contact);
+        }
+        return pojo;
     }
 
     public AchievementPojo createAchievement(long sportsmanId, AchievementPojo pojo) {
-        Achievement achievement = AchievementPojo.toEntity(pojo);
-        achievement.setAchSportsman(sportsmanRepository.findById(sportsmanId));
-        achievementRepository.save(achievement);
-        return AchievementPojo.fromEntity(achievement);
+        Optional<Sportsman> opt = sportsmanRepository.findById(sportsmanId);
+        if (opt.isPresent()) {
+            Achievement achievement = AchievementPojo.toEntity(pojo);
+            achievement.setAchSportsman(opt.get());
+            achievementRepository.save(achievement);
+            return AchievementPojo.fromEntity(achievement);
+        }
+        return pojo;
     }
 
     public SportsmanPojo updateSportsman(long pk, SportsmanPojo pojo) {
-        Sportsman sportsman = sportsmanRepository.findById(pk);
-        if (sportsman != null) {
+        Optional<Sportsman> opt = sportsmanRepository.findById(pk);
+        if (opt.isPresent()) {
+            Sportsman sportsman = opt.get();
             SportsmanPojo.setSportsmanData(sportsman, pojo);
             sportsmanRepository.save(sportsman);
             return SportsmanPojo.fromEntity(sportsman);
@@ -85,47 +103,67 @@ public class SportsmanService {
     public ContactPojo updateContact(long contactId, long sportsmanId, ContactPojo pojo) {
         if (!NumberUtils.isCreatable(pojo.getPhone()))
             throw new NumberFormatException();
-        
-        Contact contact = contactRepository.findById(contactId);
-        if (contact != null) {
+
+        Optional<Contact> contact_opt = contactRepository.findById(contactId);
+        if (contact_opt.isPresent()) {
+            Contact contact = contact_opt.get();
             contact.setEmail(pojo.getEmail());
             contact.setPhone(pojo.getPhone());
-            contact.setSportsman(sportsmanRepository.findById(sportsmanId));
-            contactRepository.save(contact);
-            return ContactPojo.fromEntity(contact);
+            Optional<Sportsman> opt = sportsmanRepository.findById(sportsmanId);
+            if (opt.isPresent()) {
+                contact.setSportsman(opt.get());
+                contactRepository.save(contact);
+                return ContactPojo.fromEntity(contact);
+            }
+            return pojo;
         }
         return pojo;
     }
 
     public AchievementPojo updateAchievement(long achievementId, long sportsmanId, AchievementPojo pojo) {
-        Achievement achievement = achievementRepository.findById(achievementId);
-        if (achievement != null) {
+        Optional<Achievement> achievement_opt = achievementRepository.findById(achievementId);
+        if (achievement_opt.isPresent()) {
+            Achievement achievement = achievement_opt.get();
             achievement.setName(pojo.getName());
             achievement.setRecvDate(pojo.getRecvDate());
-            achievement.setAchSportsman(sportsmanRepository.findById(sportsmanId));
-            achievementRepository.save(achievement);
-            return AchievementPojo.fromEntity(achievement);
+            Optional<Sportsman> opt = sportsmanRepository.findById(sportsmanId);
+            if (opt.isPresent()) {
+                achievement.setAchSportsman(opt.get());
+                achievementRepository.save(achievement);
+                return AchievementPojo.fromEntity(achievement);
+            }
+            return pojo;
         }
         return pojo;
     }
 
     public SportsmanPojo findById(long id) {
-        return SportsmanPojo.fromEntity(sportsmanRepository.findById(id));
+        Optional<Sportsman> opt = sportsmanRepository.findById(id);
+        return opt.map(SportsmanPojo::fromEntity).orElse(null);
     }
 
     public SportPojo findSportBySportsman(long id) {
-        Sportsman sportsman = sportsmanRepository.findById(id);
-        Sport sport = sportRepository.findById(sportsman.getSport().getId());
-        return SportPojo.fromEntity(sport);
+        Optional<Sportsman> opt = sportsmanRepository.findById(id);
+        if (opt.isPresent()) {
+            Sportsman sportsman = opt.get();
+            Optional<Sport> sport_opt = sportRepository.findById(sportsman.getSport().getId());
+            if (sport_opt.isPresent()) {
+                return SportPojo.fromEntity(sport_opt.get());
+            }
+        }
+        return null;
     }
 
     public TeamPojo findTeamBySportsman(long id) {
-        Sportsman sportsman = sportsmanRepository.findById(id);
-        Team sportsmanTeam = sportsman.getTeam();
-        if (sportsmanTeam != null) {
+        Optional<Sportsman> opt = sportsmanRepository.findById(id);
+        if (opt.isPresent()) {
+            Sportsman sportsman = opt.get();
+            Team sportsmanTeam = sportsman.getTeam();
             long team_id = sportsmanTeam.getId();
-            Team team = teamRepository.findById(team_id);
-            return TeamPojo.fromEntity(team);
+            Optional<Team> team_opt = teamRepository.findById(team_id);
+            if (team_opt.isPresent()) {
+                return TeamPojo.fromEntity(team_opt.get());
+            }
         }
         return null;
     }

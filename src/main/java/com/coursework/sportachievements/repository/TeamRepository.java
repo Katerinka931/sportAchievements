@@ -10,11 +10,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     List<Team> findAllByName(String name);
 
-    Team findById(long id);
-
     List<Team> findByCountGreaterThanAndCountLessThan(int count, int count2);
 
     List<Team> findByTeamsSport(Sport teamsSport);
-
-    void deleteById(long id);
 }

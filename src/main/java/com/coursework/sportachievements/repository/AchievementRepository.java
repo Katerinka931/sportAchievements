@@ -10,11 +10,7 @@ import java.util.List;
 public interface AchievementRepository extends JpaRepository<Achievement, Long> {
     List<Achievement> findAllByName(String name);
 
-    Achievement findById(long id);
-
     List<Achievement> findAllByRecvDate(Date recvDate);
 
     List<Achievement> findAllByAchSportsman(Sportsman achSportsman);
-
-    void deleteById(long id);
 }
